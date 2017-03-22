@@ -529,7 +529,7 @@ specify CRS properties not covered by existing CF grid mapping attributes, inclu
 ----
 ====
 
-Note: To enhance readability the WKT value has been split across multiple lines and embedded quotation marks (") left unescaped - in real netCDF files such characters would need to be escaped. The WKT specification in <<OGC_CTS>> appears to silent be as regards which character(s) may be used to delimit text-valued properties; however, since all the examples in that specification use quotation marks, the use of that particular delimiting character is mandated by the CF convention.
+Note: To enhance readability the WKT value has been split across multiple lines and embedded quotation marks (") left unescaped - in real netCDF files such characters would need to be escaped. The WKT specification in <<OGC_CTS>> appears to be silent as regards which character(s) may be used to delimit text-valued properties; however, since all the examples in that specification use quotation marks, the use of that particular delimiting character is mandated by the CF convention.
 
 
 
