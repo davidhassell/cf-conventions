@@ -83,10 +83,10 @@ precision) in the uncompressed variables, due to rounding errors in
 the interpolation calculations, but it assumed that this will be small
 enough to not be of concern to user of the uncompressed dataset.
 
-The lower resolution coordinates are stored in __tie point
-variable__. This term is used to ackowledge that, whilst the values of
-a tie point variable may be a subset of the uncompressed coordinate
-values, they can also be different to some or all of them.
+The lower resolution coordinates are stored in a __tie point
+variable__. This terminology  is chosen to ackowledge that, whilst the
+values of a tie point variable may be a subset of the uncompressed
+coordinate values, they can also be different to some or all of them.
 
 The method used to uncompress the tie point variables is described by
 an __interpolation variable__ that acts as a container for the
