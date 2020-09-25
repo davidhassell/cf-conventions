@@ -77,14 +77,15 @@ considerably more storage than the data itself. Space may be saved in
 the netCDF file by the storing coordinates at a lower resolution than
 the data which they describe. The uncompressed coordinate and
 auxiliary coordinate variables can be reconstituted by interpolation
-from the sampled coordinate values to the domain of the data. This
-process will likely result in a loss in accuracy (as opposed to
-precision) in the uncompressed variables, due to rounding errors in
-the interpolation calculations, but it assumed that this will be small
-enough to not be of concern to user of the uncompressed dataset.
+from the lower resolution coordinate values, to the domain of the
+data. This process will likely result in a losses in accuracy (as
+opposed to precision) in the uncompressed variables, due to rounding
+errors in the interpolation calculations, but it assumed that these
+will be small enough to not be of concern to user of the uncompressed
+dataset.
 
 The lower resolution coordinates are stored in a __tie point
-variable__. This terminology  is chosen to ackowledge that, whilst the
+variable__. This terminology is chosen to ackowledge that, whilst the
 values of a tie point variable may be a subset of the uncompressed
 coordinate values, they can also be different to some or all of them.
 
