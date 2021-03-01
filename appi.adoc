@@ -128,11 +128,8 @@ CF-netCDF element
 
 [[figure-cf-concepts]]
 [.text-center]
-.Figure I.1. The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue. The CF convention details the mechanisms which are used in the netCDF file to express the relationships among the CF-netCDF elements, but these are not shown.
+.Figure I.1. The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue.
 image::images/cfdm_cf_concepts.png[,60%,pdfwidth=50vw,align="center"]
-----
-The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue. The CF convention details the mechanisms which are used in the netCDF file to express the relationships among the CF-netCDF elements, but these are not shown.
-====
 
 
 == The CF data model
@@ -199,7 +196,7 @@ using the CF conventions.
 
 [[figure-field]]
 [.text-center]
-.Figure I.2. The constructs of the CF data model. The field construct corresponds to a CF-netCDF data variable (defined in <<figure-cf-concepts, Figure I.1>> and identified here with the "CN" prefix). Relationships between other constructs and CF-netCDF are given in <<figure-dim-aux, Figure I.3>> and <<figure-coordinate-reference, Figure I.4>>. The domain construct provides the linkage between the field construct and the constructs which describe measurement locations and cell properties. It is useful to define an abstract generic coordinate construct that can be used to refer to coordinates when the their type (dimension or auxiliary coordinate construct) is not an issue.
+.Figure I.2. The constructs of the CF data model. The field and domain constructs correspond to CF-netCDF data and domain variables respectively (defined in <<figure-cf-concepts, Figure I.1>> and identified here with the "CN" prefix). Relationships between the other constructs and CF-netCDF are given in <<figure-dim-aux, Figure I.3>> and <<figure-coordinate-reference, Figure I.4>>. It is useful to define an abstract generic coordinate construct that can be used to refer to coordinates when the their type (dimension or auxiliary coordinate construct) is not an issue.
 image::images/cfdm_field.png[,40%,pdfwidth=50vw,align="center"]
 
 === Field construct
