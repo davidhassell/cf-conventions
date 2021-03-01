@@ -67,29 +67,6 @@ metadata in a netCDF file. The virtue of this is that should netCDF
 ever fail to meet the community needs, the groundwork for applying CF
 to other file formats will already exist.
 
-===  The netCDF data model
-
-The existing CF conventions are for use with netCDF files following
-the netCDF "classic" data model (<<img-netCDF>>). We first give a
-brief summary of this explicit data model, since the CF conventions
-cannot be described without reference to the components of netCDF.
-
-NetCDF classic files contain data in named variables, which can be
-single numbers (with no dimensions), one-dimensional arrays (vectors),
-or multidimensional arrays, and the dimensions are declared by name in
-the file. Variables can be of integer, floating point or character
-data types. Variables may have attributes attached, of any data type.
-Attributes can have a single value or consist of a one-dimensional
-array. NetCDF files also have "global" file attributes which provide
-information about the dataset as a whole. NetCDF library software has
-functions to define dimensions, variables and attributes, and write
-and read data.
-
-[[img-netCDF, figure 3]]
-[.text-center]
-.Key components of the netCDF classic data model. Files consist of global attributes, dimensions and variables. Variables contain attributes and data, and attributes also contain data. Variables, attributes and dimensions all contain properties, such as a "name" which identifies them in the file. A data array has a data type for all of its elements (e.g. "double" for 64-bit floating point numbers).
-image::images/cfdm_netcdf_classic_data_model.png[,50%,pdfwidth=50vw,align="center"]
-
 === Elements of CF-netCDF
 
 The CF-netCDF elements are listed in <<table-cf-concepts>> and shown
@@ -107,6 +84,9 @@ design criteria.
 |{set:cellbgcolor!}
 CF-netCDF element
 | Description
+
+| Domain variable
+| Discrete locations in multi-dimensional space
 
 | Data variable
 | Scientific data discretised within a domain
@@ -148,7 +128,7 @@ CF-netCDF element
 
 [[img-cf-concepts, figure 2]]
 [.text-center]
-.The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (defined in <<img-netCDF>> and identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue. The CF convention details the mechanisms which are used in the netCDF file to express the relationships among the CF-netCDF elements, but these are not shown.
+.The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue. The CF convention details the mechanisms which are used in the netCDF file to express the relationships among the CF-netCDF elements, but these are not shown.
 image::images/cfdm_cf_concepts.png[,75%,pdfwidth=75vw,align="center"]
 
 
@@ -170,11 +150,11 @@ relate to the components of netCDF file (<<img-netCDF>>).
 CF construct
 | Description
 
+| Domain
+| Discrete locations in multi-dimensional space
+
 | Field
 | Scientific data discretised within a domain
-
-| Domain
-| Describes a domain
 
 | Domain axis
 | Independent axes of the domain
@@ -243,7 +223,7 @@ field which is mandatory is the data array.
 
 The properties of the field construct correspond to some netCDF
 attributes of variables (e.g. the **`units`**, **`long_name`**, and
-**`standard_name`**), and some netCDF global file attributes
+**`standard_name`**), and some netCDF group attributes, including 
 (e.g. **`history`** and **`institution`**). The term "property" is
 used, rather than "attribute", because not all CF-netCDF attributes
 are properties in this sense--some CF-netCDF attributes are used to
@@ -252,16 +232,16 @@ the data indirectly (e.g. the coordinates attribute), and others have
 structural functions in the CF-netCDF file (e.g. the Conventions
 attribute).
 
-In the data model, netCDF global file attributes apply to every data
+In the data model, netCDF group attributes apply to every data
 variable in the file, except where they are overridden by netCDF data
-variable attributes with the same name. This interpretation of global
-file attributes is not stated in the CF conventions, but for the data
-model it is necessary because there is no notion of a file. Hence,
-metadata stored in attributes of the file as a whole have to be
-transferred to the field construct. If present, the global file
-attribute **`featureType`** applies to every data variable in the file
-with a discrete sampling geometry. Hence, the feature type is regarded
-as a property of the field construct.
+variable attributes with the same name. This interpretation of group
+attributes is not stated in the CF conventions, but for the data model
+it is necessary because there is no notion of a group. Hence, metadata
+stored in attributes of the group as a whole have to be transferred to
+the field construct. If present, the global file attribute (i.e. root
+group attribute) **`featureType`** applies to every data variable in
+the file with a discrete sampling geometry. Hence, the feature type is
+regarded as a property of the field construct.
 
 The **`standard_name`** property constrains the **`units`** property
 (i.e. only certain units are consistent with each standard name) and
