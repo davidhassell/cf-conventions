@@ -528,11 +528,12 @@ floor would correspond to a domain ancillary construct. In the case of
 a named term being a type of coordinate variable, that variable will
 correspond to an independent domain ancillary construct in addition to
 the coordinate construct; that is, a single CF-netCDF variable is
-translated into two constructs (see <<cdl-domain-anc-coordinate>>).
+translated into two constructs (see <<cdl-domain-anc-coordinate,
+Example I.1>>).
 
-[[cdl-domain-anc-coordinate, example 1]]
-[caption="Example 1. "]
-.A single CF-netCDF variable corresponding to two data model constructs. The netCDF variable **`A`** corresponds to an auxiliary coordinate construct (since it is referenced by the **`coordinates`** attribute) as well as a domain ancillary construct (since it is referenced by the **`formula_terms`** attribute). Similarly for the netCDF variable **`B`**.
+[[cdl-domain-anc-coordinate]]
+[caption=""]
+.Example I.1 A single CF-netCDF variable corresponding to two data model constructs. The netCDF variable **`A`** corresponds to an auxiliary coordinate construct (since it is referenced by the **`coordinates`** attribute) as well as a domain ancillary construct (since it is referenced by the **`formula_terms`** attribute). Similarly for the netCDF variable **`B`**.
  
 ====
 
