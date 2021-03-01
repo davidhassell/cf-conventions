@@ -412,7 +412,7 @@ extent of the average of the monthly minima.
 [[img-dim-aux]]
 [.text-center]
 .Figure I.3. The relationship between domain axis, dimension coordinate and auxiliary coordinate constructs and CF-netCDF (defined in <<img-cf-concepts, Figure I.1>> and identified here with the "CN" prefix). A dimension or auxiliary coordinate construct is defined by a CF-netCDF coordinate, scalar coordinate or auxiliary coordinate variable, and the associated CF-netCDF boundary variable if it exists. A generic coordinate construct spans one or more domain axis constructs, but the mapping of which ones is only held by the parent field construct.
-image::images/cfdm_coordinates.png[,60%,pdfwidth=50vw,align="center"]
+image::images/cfdm_coordinates.png[,50%,pdfwidth=50vw,align="center"]
 
 === Coordinate reference construct
 
