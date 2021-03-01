@@ -129,7 +129,7 @@ CF-netCDF element
 [[img-cf-concepts]]
 [.text-center]
 .Figure I.1. The relationships between CF-netCDF elements and their corresponding netCDF variables, dimensions and attributes (identified here with the "NC" prefix). It is useful to define an abstract generic coordinate variable that can be used to refer to coordinates when the their type (coordinate, auxiliary or scalar coordinate variable) is not an issue. The CF convention details the mechanisms which are used in the netCDF file to express the relationships among the CF-netCDF elements, but these are not shown.
-image::images/cfdm_cf_concepts.png[,75%,pdfwidth=75vw,align="center"]
+image::images/cfdm_cf_concepts.png[,50%,pdfwidth=50vw,align="center"]
 
 
 == The CF data model
@@ -412,7 +412,7 @@ extent of the average of the monthly minima.
 [[img-dim-aux]]
 [.text-center]
 .Figure I.3. The relationship between domain axis, dimension coordinate and auxiliary coordinate constructs and CF-netCDF (defined in <<img-cf-concepts, Figure I.1>> and identified here with the "CN" prefix). A dimension or auxiliary coordinate construct is defined by a CF-netCDF coordinate, scalar coordinate or auxiliary coordinate variable, and the associated CF-netCDF boundary variable if it exists. A generic coordinate construct spans one or more domain axis constructs, but the mapping of which ones is only held by the parent field construct.
-image::images/cfdm_coordinates.png[,75%,pdfwidth=50vw,align="center"]
+image::images/cfdm_coordinates.png[,50%,pdfwidth=50vw,align="center"]
 
 === Coordinate reference construct
 
