@@ -69,7 +69,7 @@ to other file formats will already exist.
 
 === Elements of CF-netCDF
 
-The CF-netCDF elements are listed in <<table-cf-concepts>> and shown
+The CF-netCDF elements are listed in <<table-cf-concepts, Table J.1>> and shown
 (in blue) with their interrelationships in <<img-cf-concepts>>. The CF
 data model has been derived from these CF-netCDF elements and
 relationships with the aims of removing aspects specific to the netCDF
@@ -78,8 +78,8 @@ ability to describe the CF conventions fully, in order to meet the
 design criteria.
 
 [[table-cf-concepts]]
-.The elements of the CF-netCDF conventions. The relationships to netCDF entities are shown in <<img-cf-concepts>>.
-[options="header",cols="2",caption="Table J.1. "]
+.Table J.1. The elements of the CF-netCDF conventions. The relationships to netCDF entities are shown in <<img-cf-concepts>>.
+[options="header",cols="2",caption=""]
 |===============
 |{set:cellbgcolor!}
 CF-netCDF element
@@ -138,13 +138,13 @@ The elements of the CF data model (<<img-field>>, <<img-dim-aux>> and
 <<img-coordinate-reference>>) are called "constructs", a term chosen
 to differentiate from the CF-netCDF entities previously defined and to
 be programming language-neutral (i.e. as opposed to "object" or
-"structure"). The constructs, listed in <<table-cf-constructs>>, are
-related to CF-netCDF entities (<<img-cf-concepts>>), which in turn
-relate to the components of netCDF file (<<img-netCDF>>).
+"structure"). The constructs, listed in <<table-cf-constructs, Table
+J.2>>, are related to CF-netCDF entities (<<img-cf-concepts>>), which
+in turn relate to the components of netCDF file (<<img-netCDF>>).
 
 [[table-cf-constructs]]
-.The constructs of the CF data model. The relationships between the constructs and CF-netCDF entities are shown in in <<img-field>>, <<img-dim-aux>> and <<img-coordinate-reference>>.
-[options="header",cols="2",caption="Table J.2. "]
+.Table J.2. The constructs of the CF data model. The relationships between the constructs and CF-netCDF entities are shown in in <<img-field>>, <<img-dim-aux>> and <<img-coordinate-reference>>.
+[options="header",cols="2",caption=""]
 |===============
 |{set:cellbgcolor!}
 CF construct
@@ -192,14 +192,14 @@ constructs, domain constructs or their components; and the field and
 domain constructs completely contain all the data and metadata which
 can be extracted from the file using the CF conventions.
 
-[[img-field, Field constructs]]
+[[img-field]]
 [.text-center]
 .The constructs of the CF data model. The field construct corresponds to a CF-netCDF data variable (defined in <<img-cf-concepts>> and identified here with the "CN" prefix). Relationships between other constructs and CF-netCDF are given in <<img-dim-aux>> and <<img-coordinate-reference>>. The domain construct provides the linkage between the field construct and the constructs which describe measurement locations and cell properties. It is useful to define an abstract generic coordinate construct that can be used to refer to coordinates when the their type (dimension or auxiliary coordinate construct) is not an issue.
 image::images/cfdm_field.png[,50%,pdfwidth=50vw,align="center"]
 
 === Field construct
 
-A field construct (figure <<img-field>>) corresponds to a CF-netCDF data
+A field construct (<<img-field>>) corresponds to a CF-netCDF data
 variable with all of its metadata. The field construct consists of
 
 * A data array.
@@ -405,7 +405,7 @@ the individual months over which the original data was minimised; and
 all of the implied parts taken together define the exact temporal
 extent of the average of the monthly minima.
 
-[[img-dim-aux, figure J3]]
+[[img-dim-aux]]
 [.text-center]
 .The relationship between domain axis, dimension coordinate and auxiliary coordinate constructs and CF-netCDF (defined in <<img-cf-concepts>> and identified here with the "CN" prefix). A dimension or auxiliary coordinate construct is defined by a CF-netCDF coordinate, scalar coordinate or auxiliary coordinate variable, and the associated CF-netCDF boundary variable if it exists. A generic coordinate construct spans one or more domain axis constructs, but the mapping of which ones is only held by the parent field construct.
 image::images/cfdm_coordinates.png[,75%,pdfwidth=50vw,align="center"]
@@ -492,7 +492,7 @@ referenced by a formula_terms attribute corresponds to the term of a
 coordinate conversion formula--either a domain ancillary construct or,
 if it is zero-dimensional, a scalar parameter.
 
-[[img-coordinate-reference, figure J4]]
+[[img-coordinate-reference, figure 5]]
 [.text-center]
 .The relationship between coordinate reference and domain ancillary constructs and CF-netCDF (defined in <<img-cf-concepts>> and identified here with the "CN" prefix). A coordinate reference construct is defined either by a grid mapping variable, or a **`formula_terms`** attribute of a CF-netCDF coordinate variable. The coordinate reference construct is composed of generic coordinate constructs, a datum, and a coordinate conversion formula. The coordinate conversion formula is usually defined by a named formula in the CF conventions. A domain ancillary construct term of a coordinate conversion formula is defined by a CF-netCDF data variable or a CF-netCDF generic coordinate variable.
 image::images/cfdm_coordinate_reference.png[,75%,pdfwidth=75vw,align="center"]
@@ -556,12 +556,12 @@ float temp(eta, lat, lon) ;
 
 === Cell measure construct
 
-A cell measure construct provides information about the size or shape
-of the cells and depending on one, more or all of the domain axis
-constructs. Cell measure constructs have to be used when the size or
-shape of the cells cannot be deduced from the dimension or auxiliary
-coordinate constructs without special knowledge that a generic
-application cannot be expected to have.
+A cell measure (<<img-field>>) construct provides information about
+the size or shape of the cells and depending on one, more or all of
+the domain axis constructs. Cell measure constructs have to be used
+when the size or shape of the cells cannot be deduced from the
+dimension or auxiliary coordinate constructs without special knowledge
+that a generic application cannot be expected to have.
 
 The cell measure construct consists of a numeric array of the metric
 data which span one, more or all of the domain axis constructs, and
@@ -576,12 +576,12 @@ cell measure constructs.
 
 === Field ancillary constructs
 
-The field ancillary construct provides metadata which are distributed
-over the same sampling domain as the field itself. For example, if a
-data variable holds a variable retrieved from a satellite instrument,
-a related ancillary data variable might provide the uncertainty
-estimates for those retrievals (varying over the same spatiotemporal
-domain).
+The field ancillary construct (<<img-field>>) provides metadata which
+are distributed over the same sampling domain as the field itself. For
+example, if a data variable holds a variable retrieved from a
+satellite instrument, a related ancillary data variable might provide
+the uncertainty estimates for those retrievals (varying over the same
+spatiotemporal domain).
 
 The field ancillary construct consists of an array of the ancillary
 data which is either scalar or which depends on one, more or all of
@@ -597,16 +597,16 @@ auxiliary coordinate construct or domain ancillary construct.
 
 === Cell method construct
 
-The cell method constructs describe how the cell values represent the
-variation of the physical quantity within its cells--the structure of
-the data at a higher resolution. A single cell method construct
-consists of a set of axes (see below), a "method" property which
-describes how a value of the field construct's data array describes
-the variation of the quantity within a cell over those axes (e.g. a
-value might represent the cell area average), and properties serving
-to indicate more precisely how the method was applied (e.g. recording
-the spacing of the original data, or the fact the method was applied
-only over El Niño years).
+The cell method constructs (<<img-field>>) describe how the cell
+values represent the variation of the physical quantity within its
+cells--the structure of the data at a higher resolution. A single cell
+method construct consists of a set of axes (see below), a "method"
+property which describes how a value of the field construct's data
+array describes the variation of the quantity within a cell over those
+axes (e.g. a value might represent the cell area average), and
+properties serving to indicate more precisely how the method was
+applied (e.g. recording the spacing of the original data, or the fact
+the method was applied only over El Niño years).
 
 The field construct may contain an ordered sequence of cell method
 constructs describing multiple processes which have been applied to
