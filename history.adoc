@@ -6,7 +6,7 @@
 == Revision History
 
 === Working version (most recent first)
-
+* {issues}383[Issue #383]: Deleted the Preface section, inserted a reference to the homepage above the Table of Content
 * {issues}458[Issue #458]: Fix broken link to Unidata documentation.
 * {issues}423[Issue #423]: Always use "strictly monotonic" when describing coordinate variables
 * {issues}420[Issue #420]: Add List of Figures
