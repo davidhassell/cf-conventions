@@ -96,7 +96,7 @@ heading:
   margin_bottom: $vertical_rhythm * 0.9
   min_height_after: $base_line_height_length * 1.5
 title_page:
-  text_align: right
+  align: right
   logo:
     top: 10%
   title:
