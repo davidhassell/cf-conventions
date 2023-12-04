@@ -97,7 +97,7 @@ The description may define rules on the variable type, attributes and coordinate
 
 When appropriate, the table entry also contains the corresponding GRIB parameter code(s) (from ECMWF and NCEP) and AMIP identifiers.
 
-The standard name table is located at link:$$https://cfconventions.org/Data/cf-standard-names/current/src/cf-standard-name-table.xml$$[https://cfconventions.org/Data/cf-standard-names/current/src/cf-standard-name-table.xml],
+The standard name table is located at link:$$https://cfconventions.org/Data/cf-standard-names/current/src/cf-standard-name-table.xml$$[test],
 written in compliance with the XML format, as described in <<standard-name-table-format>>.
 Knowledge of the XML format is only necessary for application writers who plan to directly access the table.
 A formatted text version of the table is provided at link:$$https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html$$[https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html],
