@@ -53,7 +53,7 @@ jobs:
         echo "FINAL_TAG=-a final" >> "$GITHUB_ENV"; echo "DATE_FMT=+%d&#160;%B,&#160;%Y" >> "$GITHUB_ENV"
     # Build cf-conventions.html using the Analog-inc asciidoctor-action
     - name: Build cf-conventions.html
-      uses: Analog-inc/asciidoctor-action@v2
+      uses: actions/checkout@v2
       with:
         shellcommand: 'asciidoctor --verbose ${FINAL_TAG} -a docprodtime=$(date -u ${DATE_FMT}) cf-conventions.adoc -D conventions_build; cp -r images conventions_build'
     # Patch the cfconventions.org link
