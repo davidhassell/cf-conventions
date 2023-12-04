@@ -53,14 +53,14 @@ jobs:
         echo "FINAL_TAG=-a final" >> "$GITHUB_ENV"; echo "DATE_FMT=+%d&#160;%B,&#160;%Y" >> "$GITHUB_ENV"
     # Build cf-conventions.html using the Analog-inc asciidoctor-action
     - name: Build cf-conventions.html
-      uses: actions/checkout@v2
+      uses: Analog-inc/asciidoctor-action@v1.3.1
       with:
         shellcommand: 'asciidoctor --verbose ${FINAL_TAG} -a docprodtime=$(date -u ${DATE_FMT}) cf-conventions.adoc -D conventions_build; cp -r images conventions_build'
     # Patch the cfconventions.org link
     - run: sed -E -i 's+(https://cfconventions.org)+<a href="\1" target="_blank">\1</a>+' ./conventions_build/cf-conventions.html
     # Build cf-conventions.pdf using the Analog-inc asciidoctor-action
     - name: Build cf-conventions.pdf
-      uses: actions/checkout@v2
+      uses: Analog-inc/asciidoctor-action@v1.3.1
       with:
         shellcommand: 'asciidoctor-pdf --verbose ${FINAL_TAG} -a docprodtime=$(date -u ${DATE_FMT}) -d book -a pdf-theme=default-theme-CF-version.yml --trace cf-conventions.adoc -D conventions_build'
     # Upload artifact containing cf-conventions.html, cf-conventions.pdf
@@ -84,12 +84,12 @@ jobs:
         echo "FINAL_TAG=-a final" >> "$GITHUB_ENV"
     # Build conformance.html using the Analog-inc asciidoctor-action
     - name: Build conformance.html
-      uses: Analog-inc/asciidoctor-action@v1.2
+      uses: Analog-inc/asciidoctor-action@v1.3.1
       with:
         shellcommand: 'asciidoctor --verbose ${FINAL_TAG} conformance.adoc -D conformance_build'
     # Build conformance.pdf using the Analog-inc asciidoctor-action
     - name: Build conformance.pdf
-      uses: Analog-inc/asciidoctor-action@v1.2
+      uses: Analog-inc/asciidoctor-action@v1.3.1
       with:
         shellcommand: 'asciidoctor-pdf --verbose ${FINAL_TAG} -d book conformance.adoc -D conformance_build'
     # Upload artifact containing conformance.html, conformance.pdf
