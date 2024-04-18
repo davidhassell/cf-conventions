@@ -499,7 +499,7 @@ variables:
                                    format: fragment_format
                                    address: fragment_address
                                    shape: fragment_shape
-                                   id: fragment_id" ;	
+                                   id: fragment_id" ;	// Non-standardized feature
 
   // Coordinate variables
   double time(time) ;
