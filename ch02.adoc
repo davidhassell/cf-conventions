@@ -354,21 +354,21 @@ Fragment data shape `(17, 45, 180)` +
 `(-45, -90]` degrees north +
 `[180, 360)` degrees east
 |===============
-Six fragments are arranged in a three-dimensional fragment array with shape `(1, 3, 2)`. Each fragment spans the entirety of the Z dimension, but only a part of the Y-X plane. They may be combined to create three-dimensional aggregated data that has global `(Z, Y, X)` coverage, with shape `(17, 181, 360)`.
-
-The Z aggregated dimension is spanned by 1 fragment, the Y aggregated dimension is spanned by 3 fragments, and the X aggregated dimension is spanned by 2 fragments.
-
-See <<example-L.4>> for a CDL representation of this fragment array.
+Six fragments are arranged in a three-dimensional fragment array with shape `(1, 3, 2)`. Each fragment spans the entirety of the Z dimension, but only a part of the Y-X plane. The fragments combine to create three-dimensional aggregated data that has global `(Z, Y, X)` coverage, with shape `(17, 181, 360)`. The Z aggregated dimension is spanned by 1 fragment, the Y aggregated dimension is spanned by 3 fragments, and the X aggregated dimension is spanned by 2 fragments. See <<example-L.4>> for a CDL representation of this fragment array.
 
 ====
 
 The fragment array is defined by the aggregation variable's **`aggregated_data`** attribute. This attribute takes a string value comprising blank-separated elements of the form "__feature: variable__", where __feature__ is a case-sensitive keyword that identifies a feature of the fragment array, and __variable__ is a __fragment array variable__ that provides the feature's values for each fragment in the fragment array. The order of elements in the **`aggregated_data`** attribute is not significant.
 
-There are four standardized and mandatory fragment array features, given by the `file`, `format`, `address`, and `shape` keywords; and any amount of non-standardized features are also allowed:
+There are four standardized and mandatory features, given by the `file`, `format`, `address`, and `shape` keywords; and any amount of non-standardized features are also allowed:
 
 `file`
 
-The string-valued `file` fragment array variable defines how to find each fragment file. In general it has the same shape as the fragment array, and its values specify the fragment file names. Each file name must be either a fully qualified Uniform Resource Identifier (URI, i.e. one that starts with `file://`, `http://`, `s3://`, etc.), or else a file path that is always taken as being relative to the current location of the aggregation file.
+The string-valued `file` fragment array variable defines how to find each fragment file. In general it has the same shape as the fragment array, and its values specify the fragment file names. Each file name must take one of the following forms:
+
+* A fully qualified Uniform Resource Identifier (URI, i.e. one that starts with `file://`, `http://`, `s3://`, etc.). If the aggregation file is moved to another location then it will still be able to access the fragment files which haven't moved.
+
+* A file path that is relative to the current location of the aggregation file. If the aggregation file is moved then the fragment files must also be moved to preserve their relative locations.
 
 Multiple versions of a fragment may be provided if an extra trailing dimension is included in the `file` fragment array variable. Each version is expected to contain equivalent information, so that any version whose file exists may be selected for use in the aggregated data. This is useful when it is known in advance that various file locations will be possible for the fragment, but it is not known which of them will exist at any given future time. For instance, this feature could be used to define remotely stored and locally cached versions of a fragment, allowing an application program to only commit to the expense of accessing the remote version if the local version does not exist. Every fragment must have at least one version, but not all fragments need have the same number of versions. If a fragment has fewer versions than some others, then its trailing dimension must be padded with missing values. See <<example-L.2>>.
 
@@ -400,11 +400,9 @@ Use cases for non-standardized features include, but are not limited to:
 [[fragment-interpretation, Section 2.8.3, Fragment Interpretation]]
 ==== Fragment Interpretation
 
-The only restriction on the how a fragment is stored in a fragment file, of any format, is that the fragment must be convertible to its __canonical form__ by the application program that is creating the aggregated data. A fragment must be converted to its canonical form prior to being inserted into the aggregated data. It is up to the creator of the aggregation variable to ensure that it is possible to convert all fragments to their  canonical forms.
+The only restriction on the how a fragment is stored in a fragment file, of any format, is that the fragment must be convertible to its __canonical form__ by the application program that is creating the aggregated data. A fragment must be converted to its canonical form prior to being inserted into the aggregated data. It is up to the creator of the aggregation variable to ensure that it is possible to convert all fragments to their canonical forms.
 
 The canonical form of a fragment is such that:
-
-* The fragment's data is not compressed by packing (see <<packed-data>>).
 
 * The fragment's data, in its entirety, provides the values for a unique, contiguous part of the aggregated data.
 
@@ -414,20 +412,22 @@ The canonical form of a fragment is such that:
 
 * The fragment's data has the same units as the aggregation variable. 
 
+* The fragment's data is not packed (i.e. stored using a smaller data type than the original data).
+
 * The fragment's data has the same data type as the aggregation variable.
 
 * The fragment's data has the same indication of missing values as the aggregation variable.
 
-The conversion of fragments to their canonical form is the responsibility of the application program which is creating the aggregated data, and should allow for some or all of the following operations:
+The conversion of fragments to their canonical form is the responsibility of the application program which is creating the aggregated data, and it is up to the application program to decide what to do in the event that the conversion is not possible.
 
-* Unpacking the fragment's data. Note that if the aggregation variable indicates that the aggregated data is packed (using the attributes defined in <<packed-data>>), then the unpacked fragment data values represent packed values in the aggregated data.
+The application program is expected to allow some or all of the following operations:
 
-* Inserting any omitted size 1 dimensions into the fragment's data (e.g. as required when aggregating fragments with two-dimensional data into three-dimensional aggregated data).
+* Inserting any omitted size 1 dimensions into the fragment's data (e.g. as required when aggregating two-dimensional fragments into three-dimensional aggregated data).
 
 * Converting the fragment's data to have the aggregation variable's units (e.g. as required when aggregating time fragments whose units have different reference date/times).
 
-* Casting the data type of the fragment's data to the aggregation variable's data type. Note that some conversions may result in a loss of information (such as casting floating point fragment data to integers), and an application program may choose to disallow these.
+* Casting the data type of the fragment's data to the aggregation variable's data type. Note that some conversions may result in a loss of information (as could be the case when casting floating point numbers to integers), and an application program may choose to disallow these.
 
-* Replacing missing values in the fragment's data with values indicated by the aggregation variable as missing.
+* Unpacking the fragment's data. Note that if the aggregation variable indicates that the aggregated data is packed (as specified by attributes defined in <<packed-data>>), then the unpacked fragment data values must represent packed values in the aggregated data.
 
-An application program must not create the aggregated data if can't convert all of the fragments to their canonical form.
+* Replacing missing values in the fragment's data with values indicated by the aggregation variable as missing. Note that it is up to the creator of the aggregation variable to ensure that the non-missing fragment data values do not coincide with any of the aggregation variable's missing values.
