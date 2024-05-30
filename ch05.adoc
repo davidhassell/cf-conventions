@@ -973,7 +973,7 @@ A mesh topology variable may provide the topology for one or more domains, defin
 See the <<data-model-domain-topology>> and <<data-model-cell-connectivity>> descriptions in the CF data model for more details, including on how the mesh relates to the cells of the domain.
 
 The canonical definitions of mesh topology variables and location index set variables are given externally by the UGRID conventions <<UGRID>>, but their standardized attributes, many of which are optional, are listed in <<appendix-mesh-topology-attributes>> and <<attribute-appendix>>.
-Some features of the UGRID conventions <<UGRID>> are not currently recognized by the CF conventions: mesh topology volume cells (that are used to describe fully three-dimensional unstructured mesh topologies); and the "boundary node connectivity" variable (that specifies an index variable identifying the nodes that define where boundary condtions have been provided). 
+Some features of the UGRID conventions <<UGRID>> are not currently recognized by the CF conventions: mesh topology volume cells (that are used to describe fully three-dimensional unstructured mesh topologies); and the "boundary node connectivity" variable (that specifies an index variable identifying the nodes that define where boundary conditions have been provided). 
 
 A data or domain variable may use one of a mesh topology variable's domains by referencing the mesh topology variable with the **`mesh`** attribute; along with the identity of required domain provided by the **`location`** attribute (see example <<example-mesh-topology-variable>>).
 
@@ -983,6 +983,10 @@ Note that the mesh topology variable allows cell bounds to be provided without a
 A __location index set variable__ defines a subset of locations of a mesh topology variable, e.g. only special locations like weirs and gates.
 It is provided as a space saving device to prevent the need to redefine parts of an existing mesh topology variable, and as such is logically equivalent to a mesh topology variable.
 A data or domain variable references a location index set variable via its **`location_index_set`** attribute.
+
+A mesh topology variable referenced by the mesh attribute is not required to be present in the file containing the data, domain or location index set variable.
+If the mesh topology variable is located in an external file, rather than in the file where it is referenced, it must be listed in the global **`external_variables`** attribute of the referencing file (<<external-variables>>).
+All variables referenced by an external mesh topology variable, such as connectivity and node coordinate variables, must also be listed in the **`external_variables`** attribute, and must be located in the same external file as the mesh topology variable.
 
 [[example-mesh-topology-variable]]
 [caption="Example 5.21. "]

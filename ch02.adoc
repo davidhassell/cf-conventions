@@ -184,9 +184,92 @@ We recommend that each line begin with a timestamp indicating the date and time 
 
 [[external-variables, Section 2.6.3, "External variables"]]
 ==== External Variables
-The global **`external_variables`** attribute is a blank-separated list of the names of variables which are named by attributes in the file but which are not present in the file.
-These variables are to be found in other files (called "external files") but CF does not provide conventions for identifying the files concerned.
-The only attribute for which CF standardises the use of external variables is **`cell_measures`**.
+
+An "external variable" is one which is named by an attribute in the file but which is not present in the file, or is named by an attribute of another external variable.
+These variables are to be found in other files called "external files".
+An external variable must be in the same external file as any variables named by its attributes.
+The only attributes in the file for which CF standardizes the use of external variables are **`cell_measures`** and **`mesh`**.
+External variables are provided by the global **`external_variables`** attribute, which is a blank-separated list of external variable names, none of which are allowed to coincide with the name of any variable in the file.
+
+CF does not provide conventions for finding external files, but once an external file for an external variable has been located it is expected to contain a variable with the same name; and the names of the variable's dimensions (if any) are the same as the corresponding dimensions in the parent file, and with the same sizes.
+An additional check that an external variable is the correct one may be optionally provided with an external variable identifier.
+The global **`external_variable_identifiers`** attribute defines identifiers for any subset of the external variables.
+This is a string-valued attribute comprising a list of blank-separated pairs of words of the form "__variable: identifier__", where __variable__ is the name of an external variable, and the __identifier__ is the external variable's identifier.
+When an identifier has been provided by the **`external_variable_identifiers`** attribute, a program application that also has access to the external file should only use the corresponding external variable if it has the same identifier defined by its string-valued **`identifier`** attribute.
+When a variable listed in the **`external_variables`** attribute does not have a corresponding identifier in the **`external_variable_identifiers`** attribute, then any external variable with the correct name and dimensions may be used.
+Note that a variable referenced by an attribute of an external variable does not benefit from having an identifier, because it must always be in the same external file as its parent external variable.
+
+[[example-external-variables]]
+[caption="Example 2.2. "]
+.A file with external variables, which are shown in Example 2.3
+====
+----
+dimensions:
+  nFace = 5839 ;
+  time = 12 ;
+variables:
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "days since 2000-01-01" ;
+  double u(time, nFace) ;
+    u:standard_name = "eastward_wind" ;
+    u:units = "ms-1" ;
+    u.cell_measures = "area: cell_areas" ;
+    u:mesh = "mesh" ;
+    u:location = "face" ;
+
+// global attributes:
+    :external_variables = "cell_areas
+                           mesh
+                       	   node_lon node_lat
+                       	   face_nodes edge_nodes face_edges face_links edge_face_links" ;
+    // Optional external variable identifiers
+    :external_variable_identifiers = "cell_areas: ae45-ed12b mesh: 9ed4-83f46" ;
+----
+====
+
+[[example-external-file]]
+[caption="Example 2.3. "]
+.The external file containing the external variables for Example 2.2
+====
+----
+dimensions:
+  nNode = 3140 ;
+  nEdge = 8986 ;
+  nFace = 5839 ;
+  n2 = 2 ;
+  n3 = 3 ;
+variables:
+  // Cell measure variable (could be in a different file to the mesh variables)
+  double cell_areas(nFace) ;
+    cell_areas:identifier = "ae45-ed12b" ;  // Optional identifier
+    cell_areas:standard_name = "cell_area" ;
+    cell_areas:units = "m2" ;
+
+  // Mesh topology variable
+  int mesh ;
+    mesh:identifier = "9ed4-83f46" ;  // Optional identifier
+    mesh:cf_role = "mesh_topology" ;
+    mesh:long_name = "Topology of 2D unstructured mesh" ;
+    mesh:topology_dimension = 2 ;
+    mesh:node_coordinates = "node_lon node_lat" ;
+    mesh:face_node_connectivity = "face_nodes" ;
+    mesh:edge_node_connectivity = "edge_nodes" ;
+    mesh:face_edge_connectivity = "face_edges" ;
+    mesh:face_face_connectivity = "face_links" ;
+    mesh:edge_face_connectivity = "edge_face_links" ;
+
+  // Variables referenced by the mesh topology variable (must be in the
+  // same file as the mesh topology variable)
+  double node_lon(nNode) ;
+  double node_lat(nNode) ;
+  int face_nodes(nFace, n3) ;
+  int edge_nodes(nEdge, n2) ;
+  int face_edges(nFace, n3) ;
+  int face_links(nFace, n3) ;
+  int edge_face_links(nEdge, n2) ;
+----
+====
 
 [[groups, Section 2.7, "Groups"]]
 === Groups

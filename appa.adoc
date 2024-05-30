@@ -129,12 +129,17 @@ Identifies the roles of mesh topology and location index set variables (see <<ap
 | <<domain-variables>>
 | Identifies the dimensions that define a domain variable.
 
+|**`external_variable_identifiers`**
+| S
+| G
+| <<external-variables>>
+| Records identifiers for external variables.
+
 |**`external_variables`**
 | S
 | G
-| <<external-variables>>, <<cell-measures>>
-| Identifies variables which are named by **`cell_measures`** attributes in the file but which are not present in the file.
-
+| <<external-variables>>
+| Identifies variables which are named by selected attributes in the file but which are not present in the file.
 
 | **`_FillValue`**
 | D
@@ -199,6 +204,12 @@ Use in conjunction with **`flag_meanings`**.
 | G, Gr
 | link:$$https://www.unidata.ucar.edu/software/netcdf/docs/attribute_conventions.html$$[NUG Appendix A, "Attribute Conventions"]
 | List of the applications that have modified the original data.
+
+|**`identifier`**
+| S
+| -
+| <<external-variables>>
+| Records an identifier for an external variable in an external file.
 
 | **`instance_dimension`**
 | S

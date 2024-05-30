@@ -195,7 +195,7 @@ For rectangular longitude-latitude grids, the area of grid cells can be calculat
 In this case supplying grid-cell areas via the **`cell_measures`** attribute is unnecessary because it may be assumed that applications can perform this calculation, using their own value for the radius of the Earth.
 
 A variable referenced by **`cell_measures`** is not required to be present in the file containing the data variable.
-If the **`cell_measures`** variable is located in another file (an "external file"), rather than in the file where it is referenced, it must be listed in the **`external_variables`** attribute of the referencing file (Section 2.6.3).
+If the **`cell_measures`** variable is located in another file (an "external file"), rather than in the file where it is referenced, it must be listed in the **`external_variables`** attribute of the referencing file (<<external-variables>>).
 
 [[cell-areas-for-a-spherical-geodesic-grid]]
 [caption="Example 7.4. "]
