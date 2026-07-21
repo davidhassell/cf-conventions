@@ -80,6 +80,9 @@ include::ch08.adoc[]
 :numbered:
 include::ch09.adoc[]
 
+:numbered:
+include::ch10.adoc[]
+
 :numbered!:
 include::appa.adoc[]
 
