@@ -20,6 +20,11 @@ I.1. <<table-cf-concepts>>
 I.2. <<table-cf-constructs>>
 J.1. <<table-subsampling-formulas>>
 K.2. <<table-mesh-topology-attributes>>
+N.1. <<uncertainty-cv-distribution-type>>
+N.2. <<uncertainty-cv-distribution-parameter>>
+N.3. <<uncertainty-cv-structural-type>>
+N.4. <<uncertainty-cv-structural-type-parameters>>
+N.5. <<uncertainty-cv-coverage-probabilities>>
 
 **List of Figures**
 
@@ -121,9 +126,10 @@ J.5. <<quadratic3>>
 10.4. <<example-uncertainty-expanded-uncertainty>>
 10.5. <<example-uncertainty-components>>
 10.6. <<example-uncertainty-distribution>>
-10.7. <<example-uncertainty-error-correlation-1d>>
-10.8. <<example-uncertainty-error-correlation-2d>>
-10.9. <<example-uncertainty-error-correlation-comment>>
+10.7. <<example-uncertainty-error-correlation-1d-a>>
+10.8. <<example-uncertainty-error-correlation-1d-b>>
+10.9. <<example-uncertainty-error-correlation-2d>>
+10.10. <<example-uncertainty-error-correlation-comment>>
 B.1. <<name-table-three-entries-ex>>
 H.1. <<example-h.1>>
 H.2. <<example-h.2>>

@@ -21,7 +21,7 @@ For example, when a coverage interval is defined for a skewed probability distri
 The coverage interval, which may vary across the data variable's domain, is defined by the array of an uncertainty variable with a numeric data type; and the probability that the true value lies inside the coverage interval is stored by the uncertainty variable's **`coverage_probability`** attribute.
 
 In general, an uncertainty variable must have all or a subset of the dimensions of the data variable to which it is related, with the addition of a size-two __interval dimension__ for defining the coverage interval limits (but the interval dimension may be omitted in the common case of the coverage interval being symmetrical about the data variable values, as described below).
-These are stored as difference offsets to the data variable values (but relative differences may also be provided, as described below).
+These are stored as difference offsets to the data variable values (but relative differences may also be provided, see <<relative-differences>>).
 The coverage interval limits are reconstructed by adding the two offsets to the data variable values.
 The interval dimension must be the most rapidly varying dimension (the last dimension in CDL order), with the first element representing the coverage interval's lower limit and the second representing the coverage interval's upper limit.
 The order of other dimensions is not restricted, and does not have to be the same as for the parent data variable.
@@ -326,17 +326,17 @@ The **`probability_distribution`** attribute of an uncertainty variable describe
 In general the attribute is optional, and there is no default value.
 However, the attribute must be set if the **`coverage_interval`** attribute is `standard_deviation`.
 
-The **`probability_distribution`** attribute is a string attribute of the form: "__distribution_name [(moment: value [moment: value ...])]__", where square brackets indicate optional content.
-The "__distribution_name__" keyword identifies the mathematical form of the probability distribution, and the optional "__moment: value__" pairs provide statistical moments of the probability distribution.
+The **`probability_distribution`** attribute is a string attribute of the form: "__distribution_type [(parameter: value [parameter: value ...])]__", where square brackets indicate optional content.
+The "__distribution_type__" keyword identifies the mathematical form of the probability distribution, and the optional "__parameter: value__" pairs provide parameters that define the distribution.
 
-The "__distribution_name__" must be one of the probability distribution names defined in <<uncertainty-cv>> (such as `gaussian`).
+The "__distribution_type__" must be one of the probability distribution names defined in <<uncertainty-cv-distribution-type, Table N.1>> (such as `gaussian`).
 
-A statistical moment is defined by a "__moment: value__" pair.
-The type of moment is named by the "__moment__" keyword, and must be one of the moment names defined in <<uncertainty-cv>> (such as `kurtosis`).
-The "__value__" names a moment variable whose data array contains the moment values, and which may have attributes to describe it (such as **`units`** or  **`standard_name`**).
+A distribution parameter may be defined by a "__parameter: value__" pair.
+The type of parameter is named by the "__parameter__" keyword, and must be one of the distribution parameter names defined in <<uncertainty-cv-distribution-parameter, Table N.2>> (such as `skew`).
+The "__value__" names a __distribution parameter variable__ whose data array contains the distribution parameter values, and which may have attributes to describe it (such as **`units`** or  **`standard_name`**).
 
-A moment variable must have all or a subset of the dimensions of the uncertainty variable to which it is related.
-The order of dimensions of a moment variable is not restricted; it does not have to be the same as for the parent uncertainty variable.
+A distribution parameter variable must have all or a subset of the dimensions of the uncertainty variable to which it is related.
+The order of dimensions of a distribution parameter variable is not restricted; it does not have to be the same as for the parent uncertainty variable.
 If a moment variable of an uncertainty variable that has been compressed by gathering does not span the compressed dimension (<<compression-by-gathering>>), then the subset of the parent uncertainty variable dimensions is restricted to the uncertainty variable's uncompressed dimensions, i.e. it may have any of the dimensions listed by the compress attribute of the compressed coordinate variable, as well as any of the other dimensions of the uncertainty variable (those apart from the compressed dimension).
 
 [[example-uncertainty-distribution]]
@@ -361,15 +361,15 @@ variables:
     q_uncertainty:coverage_interval = "offsets" ; 
     q_uncertainty:coverage_probability = 0.9 ; 
     q_uncertainty:probability_distribution = "skewed_gaussian (skew: skew kurtosis: kurtosis)" ;
-  // Moment variables 
+  // Distribution parameter variables
   float skew(time) ; 
     skew:units = "1" ; 
   float kurtosis(time) ; 
-    kurtosis:units = "1" ;
+    kurtosis:units = "1" ; 
 ----
 The uncertainty variable `q_uncertainty` contains a coverage interval defined by lower and upper limits.
 The probability that the true values of the data variable `q` are within the coverage interval limits is 0.9.
-The errors are characterized by a skew-normal distribution, which is further defined at each point with its skewness and kurtosis (i.e. the third and fourth standardized statistical moments respectively), that are provided in separate moment variables.
+The errors are characterized by a skew-normal distribution, which is further defined at each point with its skewness (i.e. the third standardized statistical moment), that is provided in a separate distribution parameter variable.
 
 ====
 
@@ -438,7 +438,7 @@ Each block along the main diagonal represents the error-correlations between pai
 To save space in the dataset, form 1b should only be used when the error-correlation structure is intrinsically coupled across the dimensions, and cannot be calculated using the Kronecker product <<KRONECKER>> of error-correlation matrices that each apply to a single dimension.
 
 *Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names a defined error-correlation structural type that implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
-The allowed structural types are defined in <<uncertainty-cv>>.
+The allowed structural types are defined in <<uncertainty-cv-structural-type, Table N.3>>.
 For instance, when the errors are uncorrelated the error-correlation matrix is always the identity matrix, which can be parameterized with the structural type uncorrelated.
 The special case of there being no dimension is a convenience for the common case of the structural type being applied independently to each dimension of the parent data variable.
 For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `uncorrelated`, `lat: uncorrelated lon: uncorrelated`, and `lon: uncorrelated lat: uncorrelated` are equivalent.
@@ -447,13 +447,13 @@ If the data writer expects "__error_correlation_structure__" to be interpreted a
 
 *Form 2b* is similar to form 2a, but with the addition of standardized parameters for configuring the structural type.
 Parameters for configuring the structural type are given by the "__parameter: value__" pairs that identify a configuration parameter and provide its value.
-The allowed parameters for each structural type are given in <<uncertainty-cv>>, which also specifies whether or not a parameter is allowed to take a default value when not present.
+The allowed parameters for each structural type are given in <<uncertainty-cv-structural-type-parameters, Table N.4>>.
 In general, "__value__" names a scalar __error-correlation parameter variable__ that contains the parameter value in its data array, and may have attributes to describe it (such as **`units`** or a **`standard_name`**).
 However, in the special case that the parameter value is an integer with no units (such as a number of cells), then the "__value__" may alternatively be set as the decimal representation of that integer.
-For instance, the `triangle_relative` structural type must be configured with the parameter __n__, and for a parameter value of 50, this could be specified as either `n: 50` or `n: varname`, where `varname` is the name of a scalar variable with the value 50 in its data array.
+For instance, the `trianglar` structural type must be configured with the parameter __n__, and for a parameter value of 50, this could be specified as either `n: 50` or `n: varname`, where `varname` is the name of a scalar variable with the value 50 in its data array.
 If the data writer expects "__value__" to be interpreted as an integer, then none of the variables in the dataset should be given a name identical to that of the string of digits, because the encoding of an error-correlation parameter variable takes precedence.
 
-[[example-uncertainty-error-correlation-1d]]
+[[example-uncertainty-error-correlation-1d-a]]
 [caption="Example 10.7. "]
 .One-dimensional error correlations
 ====
@@ -475,7 +475,7 @@ variables:
   float unc(lat, lon) ; 
     unc:error_correlation = "lat: correlations
                              time: uncorrelated
-                             lon: bell_shaped_relative (sigma: sigma n: 15)" ; 
+                             lon: triangular (n: 15)" ; 
   // Error-correlation variable 
   float correlations(lat, lat1) ; 
   // Error-correlation parameter variable 
@@ -489,13 +489,49 @@ Error correlations described by error-correlation matrices that demonstrate form
 Other uncertainty attributes have been omitted for clarity.
 For the `lat` dimension there is an error-correlation variable called correlations giving actual the error-correlation coefficients (form 1a).
 For the `time` dimension, that is not spanned by the uncertainty variable, the error-correlation coefficients are parameterized as uncorrelated (form 2a).
-For the `lon` dimension the error-correlation coefficients are parameterized as `bell_shaped_relative` with two configuration parameters, one of which is an error-correlation parameter variable called `sigma`, and one is an integer (form 2b).
+For the `lon` dimension the error-correlation coefficients are parameterized as the `triangular` error-correlation structural type, with the configuration parameter `n` given as an integer (number of grid cells) within the  **`error_correlation`** attribute (form 2b).
+Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
+
+====
+
+[[example-uncertainty-error-correlation-1d-b]]
+[caption="Example 10.8. "]
+.One-dimensional error correlations with an error-correlation parameter variable 
+====
+----
+dimensions: 
+  time = 30 ; 
+  lat = 180 ; 
+  lon = 360 ; 
+  lat1 = 180 ; 
+
+variables: 
+  // Data variable 
+  float sst(time, lat, lon) ; 
+    sst:standard_name = "sea_surface_temperature" ; 
+    sst:units = "K" ; 
+    sst:units_metadata = "temperature: on_scale" ; 
+    sst:uncertainty_variables = "unc" ; 
+  // Uncertainty variable 
+  float unc(lat, lon) ; 
+    unc:error_correlation = "lat: correlations
+                             time: uncorrelated
+                             lon: triangular (n: x)" ; 
+  // Error-correlation variable 
+  float correlations(lat, lat1) ; 
+  // Error-correlation parameter variable 
+  float x ; 
+    x:units = "m" ; 
+
+----
+
+As for example <<example-uncertainty-error-correlation-1d, Example 10.7>>, but now the configuration parameter `n` of the `triangular` error-correlation structural type is provided by the error-correlation parameter variable `x`, which gives the parameter value in units of metres.
 Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
 
 [[example-uncertainty-error-correlation-2d]]
-[caption="Example 10.8. "]
+[caption="Example 10.9. "]
 .Multi-dimensional error correlations
 ====
 ----
@@ -533,7 +569,7 @@ The non-standardized information may optionally be preceded by the string "__com
 Similarly to form 2a, the special case of there being no given dimension (e.g. `(length scale = 100 km)`) is a convenience for when the non-standardized information is to be applied independently to each dimension of the parent data variable, and in this case there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
 
 [[example-uncertainty-error-correlation-comment]]
-[caption="Example 10.9. "]
+[caption="Example 10.10. "]
 .Error correlations described by comments
 ====
 ----
