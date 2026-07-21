@@ -115,6 +115,15 @@ J.5. <<quadratic3>>
 8.7. <<example-interpolation-of-cell-boundaries>>
 8.8. <<example-quantization-nsb-libnetcdf>>
 8.9. <<example-quantization-nsd-multiple-variables-nco>>
+10.1. <<example-uncertainty-standard-deviation>>
+10.2. <<example-uncertainty-asymmetric-interval>>
+10.3. <<example-uncertainty-relative-difference>>
+10.4. <<example-uncertainty-expanded-uncertainty>>
+10.5. <<example-uncertainty-components>>
+10.6. <<example-uncertainty-distribution>>
+10.7. <<example-uncertainty-error-correlation-1d>>
+10.8. <<example-uncertainty-error-correlation-2d>>
+10.9. <<example-uncertainty-error-correlation-comment>>
 B.1. <<name-table-three-entries-ex>>
 H.1. <<example-h.1>>
 H.2. <<example-h.2>>

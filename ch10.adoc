@@ -1,23 +1,24 @@
-﻿[[uncertinty, Chapter 10, Uncertainty]]
+﻿[[uncertainty, Chapter 10, Uncertainty]]
 == Uncertainty
 
 When a variable provides metadata about the uncertainty in the measurement of a quantity described by another data variable, it may be desirable to express this association by providing a link between the variables.
 The attribute **`uncertainty_variables`** is used to express these types of relationships.
 It is a string attribute whose value is a blank separated list of variable names, for which the order is not significant.
-The nature of the relationship between a data variable and its __uncertainty variables__ (i.e. those named by its uncertainty_variables attribute) is determined by the uncertainty variables' attributes. 
+The nature of the relationship between a data variable and its __uncertainty variables__ (i.e. those named by its **`uncertainty_variables`** attribute) is determined by the uncertainty variables' attributes.
 
-The provision of uncertainty metadata is designed to be consistent, in both scientific content and terminology, with the "Guide to the expression of uncertainty in measurement" [GUM] and the "International Vocabulary of Metrology" [VIM], both published by the Joint Committee for Guides in Metrology, which should be considered the canonical references for this chapter. 
+The provision of uncertainty metadata is designed to be consistent, in both scientific content and terminology, with the "Guide to the expression of uncertainty in measurement" <<GUM>> and the "International Vocabulary of Metrology" <<VIM>>, both published by the Joint Committee for Guides in Metrology, which should be considered the canonical references for this chapter.
 
 Measurement, in the context of uncertainty, is the process of obtaining a numerical value that represents a physical quantity (i.e. the measurand).
 A measured value is typically derived from a numerical simulation (e.g. climate model output), a direct observation (e.g. sensor data), or a remote sensing platform (e.g. satellite retrievals).
 The error of a measurement is the measured value minus the true, unknowable value of the measurand.
-The uncertainty of a measurement is a measure of the dispersion of the values that could reasonably be attributed to the measurand.  
+The uncertainty of a measurement is a measure of the dispersion of the values that could reasonably be attributed to the measurand.
 
-Uncertainty is expressed as a statistical coverage interval (hereafter referred to as a "coverage interval") derived from the probability distribution of the measurand (hereafter referred to as the "probability distribution") that contains the true value with a given probability, i.e. the range of values within which the true value is expected to lie. For instance, for a measured value of 50 there could a probability of 0.95 that the true value lies within the coverage interval [40, 60].
+Uncertainty is expressed as a statistical coverage interval (hereafter referred to as a "coverage interval") derived from the probability distribution of the measurand (hereafter referred to as the "probability distribution") that contains the true value with a given probability, i.e. the range of values within which the true value is expected to lie.
+For instance, for a measured value of 50 there could a probability of 0.95 that the true value lies within the coverage interval [40, 60].
 This concept is applicable to any probability distribution, including Gaussian, non-Gaussian, and asymmetric distributions.
-For example, when a coverage interval is defined for a skewed probability distribution, the interval limits would typically be asymmetric about the measured value.  
+For example, when a coverage interval is defined for a skewed probability distribution, the interval limits would typically be asymmetric about the measured value.
 
-The coverage interval, which may vary across the data variable's domain, is defined by the array of an uncertainty variable with a numeric data type; and the probability that the true value lies inside the coverage interval is stored by the uncertainty variable's coverage_probability attribute.  
+The coverage interval, which may vary across the data variable's domain, is defined by the array of an uncertainty variable with a numeric data type; and the probability that the true value lies inside the coverage interval is stored by the uncertainty variable's **`coverage_probability`** attribute.
 
 In general, an uncertainty variable must have all or a subset of the dimensions of the data variable to which it is related, with the addition of a size-two __interval dimension__ for defining the coverage interval limits (but the interval dimension may be omitted in the common case of the coverage interval being symmetrical about the data variable values, as described below).
 These are stored as difference offsets to the data variable values (but relative differences may also be provided, as described below).
@@ -25,25 +26,25 @@ The coverage interval limits are reconstructed by adding the two offsets to the 
 The interval dimension must be the most rapidly varying dimension (the last dimension in CDL order), with the first element representing the coverage interval's lower limit and the second representing the coverage interval's upper limit.
 The order of other dimensions is not restricted, and does not have to be the same as for the parent data variable.
 For instance, for a data variable containing a measured value of 30 there could be a probability of 0.9 that the true value lies within the coverage interval [25, 40].
-The coverage interval offsets could be stored in an uncertainty variable array as (−5, 10), and adding the data variable value of 30 to these values reconstitutes the actual coverage interval of [25, 40]. 
+The coverage interval offsets could be stored in an uncertainty variable array as (−5, 10), and adding the data variable value of 30 to these values reconstitutes the actual coverage interval of [25, 40].
 
-An uncertainty variable containing difference offsets represents the same physical quantity as the parent data variable, and so its units must be physically equivalent to the data variable units (not necessarily identical, see Section 3.1, "Units").
+An uncertainty variable containing difference offsets represents the same physical quantity as the parent data variable, and so its units must be physically equivalent to the data variable units (not necessarily identical, see <<units>>).
 If the uncertainty variable has a **`standard_name`** attribute then it must be identical to the **`standard_name`** attribute of the parent data variable.
-However, if the uncertainty variable has no standard name then it may be associated with any appropriate parent data variable with physically equivalent units. Note that there are different rules regarding the **`units`** and **`standard_name`** attributes of an uncertainty variable that contains relative differences (see <<relative-differences>>).
+However, if the uncertainty variable has no standard name then it may be associated with any appropriate parent data variable with physically equivalent units.
+Note that there are different rules regarding the **`units`** and **`standard_name`** attributes of an uncertainty variable that contains relative differences (<<relative-differences>>).
 
 When the coverage interval is symmetrical about the data variable values (i.e. the data variable values lie at the midpoint of the coverage interval), the coverage interval may be fully defined by a single non-negative value: the coverage interval half-width.
 This value is equal to the absolute difference between the data variable value and the coverage interval's lower or upper limit.
 The coverage interval limits are reconstructed by subtracting the half-width from, and adding it to, the data variable value.
-This case is indicated by specific values of the coverage_interval attribute (such as standard_deviation and half_width), for which the size-two interval dimension is not required and must be omitted.
+This case is indicated by specific values of the **`coverage_interval`** attribute (such as `standard_deviation` and `half_width`), for which the size-two interval dimension is not required and must be omitted.
 For instance, for a data variable containing a measured value of 20 there could be a probability of 0.95 that the true value lies within the coverage interval [15, 25].
-This coverage interval is symmetrical around the data variable value, so the half-width could be stored in an uncertainty variable array as 5, and subtracting this from, and adding it to, the data variable value of 20 reconstitutes the actual coverage interval of [15, 25]. 
+This coverage interval is symmetrical around the data variable value, so the half-width could be stored in an uncertainty variable array as 5, and subtracting this from, and adding it to, the data variable value of 20 reconstitutes the actual coverage interval of [15, 25].
 
-If an uncertainty variable of a data variable that has been compressed by gathering does not span the compressed dimension (Section 8.2, "Lossless Compression by Gathering"), then the subset of the parent data variable dimensions is restricted to the data variable's uncompressed dimensions, i.e. it may have any of the dimensions listed by the compress attribute of the compressed coordinate variable, as well as any of the other dimensions of the data variable (those apart from the compressed dimension). 
+If an uncertainty variable of a data variable that has been compressed by gathering does not span the compressed dimension (<<compression-by-gathering>>), then the subset of the parent data variable dimensions is restricted to the data variable's uncompressed dimensions, i.e. it may have any of the dimensions listed by the compress attribute of the compressed coordinate variable, as well as any of the other dimensions of the data variable (those apart from the compressed dimension).
 
-
-[[example-uncertainty-TODO]]
+[[example-uncertainty-standard-deviation]]
 [caption="Example 10.1. "]
-.TODO
+.Standard uncertainty
 ====
 ----
 dimensions: 
@@ -68,15 +69,15 @@ data:
   q_uncertainty = 0.003, 0.001, 0.002, ... ; 
 ----
 
-The uncertainty variable `q_uncertainty` contains the standard deviation (σ) of the Gaussian distribution that characterizes the errors in the data variable `q`.
+The uncertainty variable `q_uncertainty` contains the standard deviation (σ, the standard uncertainty) of the Gaussian distribution that characterizes the errors in the data variable `q`.
 The probability that the true values of `q` are within σ of its actual array values is 0.6827.
 For instance, for the first element of the time dimension the measured value of specific humidity is 0.024, and there is a 68.27% chance that its true value lies in the range [0.021, 0.027]. 
 
 ====
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-asymmetric-interval]]
 [caption="Example 10.2. "]
-.TODO
+.Asymmetric uncertainty coverage interval
 ====
 ----
 dimensions: 
@@ -111,9 +112,9 @@ The probability distribution of the errors is unspecified.
 ====
 
 When multiple uncertainty variables are given, each stores a component of uncertainty.
-The combined uncertainty of the components (i.e. the total uncertainty arising from all uncertainty components) may be additionally provided in an uncertainty variable identified with an uncertainty_component attribute value of combined_uncertainty.  
+The combined uncertainty of the components (i.e. the total uncertainty arising from all uncertainty components) may be additionally provided in an uncertainty variable identified with an **`uncertainty_component`** attribute value of `combined_uncertainty`.
 
-It is deprecated to express uncertainty using an ancillary variable with the standard_error standard name modifier (Section 3.4, "Ancillary Data").
+It is deprecated to express uncertainty using an ancillary variable with the standard_error standard name modifier (<<ancillary-data>>).
 
 [[relative-differences, Section 10.1, "Relative differences"]]
 === Relative differences
@@ -124,16 +125,16 @@ If the uncertainty is provided as a percentage, `f` is found by dividing the unc
 For instance, for a data variable containing a measured value of 20 there could be a probability of 0.95 that the true value lies within the symmetrical coverage interval [15, 25], and the half-width could be stored in an uncertainty variable array as 25% or 0.25.
 
 For a coverage interval defined by two offsets stored in an interval dimension (i.e. when the **`coverage_interval`** attribute is `offsets`), the limits are reconstituted by multiplying the data variable value by the factors `1 + f` and `1 + g`, where `f` and `g` are the two relative offset uncertainty array values expressed as fractions.
-For instance, for a data variable containing a measured value of 20 there could be a probability of 0.9 that the true value lies within the asymmetric coverage interval [15, 30], in which case the coverage interval offsets could be stored in an uncertainty variable array as (−25%, 50%) or (−0.25, 0.5). 
+For instance, for a data variable containing a measured value of 20 there could be a probability of 0.9 that the true value lies within the asymmetric coverage interval [15, 30], in which case the coverage interval offsets could be stored in an uncertainty variable array as (−25%, 50%) or (−0.25, 0.5).
 
 An uncertainty variable containing relative difference offsets does not represent the same physical quantity as the parent data variable, and must not have a **`standard_name`** attribute.
 It must have dimensionless units or units of percent, for fractional and percentage relative differences respectively.
-The uncertainty variable may be associated with any appropriate parent data variable, but it is not recommended to use relative differences when the data variable has array values of zero, or has on-scale units with a shifted origin (such as on-scale Celsius, see Section 3.1.2, "Temperature units"), because there is a possibility that the coverage intervals reconstructed by the data reader are not those intended by the data writer.
-In the case of a zero data variable value, a non-zero relative difference offset always results in a zero-width coverage interval; and in the case of on-scale units with a shifted origin, the reconstructed coverage interval depends on whether the given data variable units are used, or if equivalent units with the origin unshifted are used instead. 
+The uncertainty variable may be associated with any appropriate parent data variable, but it is not recommended to use relative differences when the data variable has array values of zero, or has on-scale units with a shifted origin (such as on-scale Celsius, see <<temperature-units>>), because there is a possibility that the coverage intervals reconstructed by the data reader are not those intended by the data writer.
+In the case of a zero data variable value, a non-zero relative difference offset always results in a zero-width coverage interval; and in the case of on-scale units with a shifted origin, the reconstructed coverage interval depends on whether the given data variable units are used, or if equivalent units with the origin unshifted are used instead.
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-relative-difference]]
 [caption="Example 10.3. "]
-.TODO
+.Uncertainty defined as relative differences
 ====
 ----
 dimensions: 
@@ -159,14 +160,14 @@ variables:
     uncertainty:coverage_probability = 0.9 ; 
 
 data: 
-  skin = 273.15, 274.15, 272.9, ... ; 
-  subskin = 273.5, 273.9, 273.0, ... ; 
+  skin = 283.15, 284.15, 282.9, ... ; 
+  subskin = 284.5, 283.9, 283.0, ... ; 
   uncertainty = 1.0 ; 
 ----
 
 The uncertainty variable `uncertainty` contains the half-width of the coverage interval that characterizes the errors in both the data variables `skin` and `subskin`, expressed as a relative percentage difference.
 For each element of the `time` dimension there is a 90% chance that the true value lies within 1% its data variable value.
-For instance, the first element of the `skin` variable is 273.15 and has a coverage interval of [270.4185, 275.8815]; and the first element of the `subskin` variable is 273.5 and has a coverage interval of [270.765, 276.235]. 
+For instance, the first element of the `skin` variable is 283.15 and has a coverage interval of [280.3185, 285.9815]; and the first element of the `subskin` variable is 284.5 and has a coverage interval of [281.655, 287.345]. 
 
 ====
 
@@ -187,25 +188,26 @@ The **`coverage_interval`** attribute specifies how the uncertainty variable arr
 The attribute must be set, and takes one of the following values: 
 
 `standard_deviation`:: The array has no interval dimension and contains the coverage interval's non-negative half-width that is equal to the standard deviation of the probability distribution defined by the **`probability_distribution`** attribute, which must also be set.
-One standard deviation of the probability distribution is also known as the "standard uncertainty".   
-However, if the coverage_factor attribute has a value other than 1, then the values in the uncertainty variable array are instead one standard deviation multiplied by this amount. 
+One standard deviation of the probability distribution is also known as the "standard uncertainty".
+However, if the **`coverage_factor`** attribute has a value other than 1, then the values in the uncertainty variable array are instead one standard deviation multiplied by this amount.
 
-`half_width`:: The array has no interval dimension and contains the coverage interval's non-negative half-width.  
+`half_width`:: The array has no interval dimension and contains the coverage interval's non-negative half-width.
 
-`offsets`:: The array has a size-two interval dimension that contains the offsets which define the lower and upper limits coverage interval.  
+`offsets`:: The array has a size-two interval dimension that contains the offsets which define the lower and upper limits coverage interval.
 
 ==== uncertainty_representation 
 
 The **`uncertainty_representation`** attribute specifies whether the uncertainty variable array represents absolute or relative differences to the data variable values, and takes one of the following values: 
 
-**`difference`**:: This is the default. The array contains values that are differences to the data variable values. 
+**`difference`**:: This is the default.
+The array contains values that are differences to the data variable values.
 
-**`relative_difference`**:: The array contains values that are fractional or percentage relative differences to the data variable. 
+**`relative_difference`**:: The array contains values that are fractional or percentage relative differences to the data variable.
 
 ==== coverage_probability
 
 The **`coverage_probability`** attribute contains the probability, in the range 0 to 1, that the coverage interval contains the true data variable value.
-The attribute must be set, and Appendix N: Controlled Vocabularies for Uncertainty Data provides the coverage probabilities for common coverage intervals based on the standard deviation of selected probability distributions. 
+The attribute must be set, and <<uncertainty-cv>> provides the coverage probabilities for common coverage intervals based on the standard deviation of selected probability distributions.
 
 ==== probability_distribution 
 
@@ -216,12 +218,12 @@ The **`probability_distribution`** attribute describes the mathematical form of 
 When the **`coverage_interval`** attribute is `standard_deviation`, the **`coverage_factor`** attribute gives a positive numerical "coverage factor" for the coverage interval.
 For values other than 1, the uncertainty variable represents an "expanded uncertainty", i.e. one for which the values in the uncertainty variable array are in fact the standard deviation of the probability distribution multiplied by the coverage factor.
 The standard deviation of the probability distribution (i.e. the standard uncertainty) may be calculated by dividing the uncertainty variable array values by the coverage factor.
-The attribute is optional with a default value of 1, and must not be set if the **`coverage_interval`** attribute is not `standard_deviation`. 
+The attribute is optional with a default value of 1, and must not be set if the **`coverage_interval`** attribute is not `standard_deviation`.
 
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-expanded-uncertainty]]
 [caption="Example 10.4. "]
-.TODO
+.Expanded uncertainty
 ====
 ----
 dimensions: 
@@ -249,7 +251,7 @@ data:
 
 The uncertainty variable `q_uncertainty` contains two standard deviations (2σ) of the Gaussian distribution that characterizes the errors in the data variable `q`.
 The probability that the true values of `q` are within 2σ of its actual array values is 0.9545.
-For instance, for the first element of the `time` dimension the data variable value is 0.024, and there is a 95.45% chance that its true value lies in the range [0.018, 0.030]. 
+For instance, for the first element of the `time` dimension the data variable value is 0.024, and there is a 95.45% chance that its true value lies in the range [0.018, 0.030].
 
 ====
 
@@ -258,29 +260,29 @@ For instance, for the first element of the `time` dimension the data variable va
 The **`uncertainty_evaluation`** attribute describes the method used to evaluate the uncertainty, one of: 
 
 `statistical`:: Based on statistical analysis, i.e. obtained from a probability density function derived from an observed frequency distribution, such as a coverage interval derived from the standard error of the mean of an original sample.
-This is also known as a "Type A evaluation".  
+This is also known as a "Type A evaluation".
 
 `scientific_judgement`:: Based on scientific judgement, i.e. obtained from an assumed probability density function, such as a coverage interval derived from an instrument manufacturer's accuracy specification.
-This is also known as a "Type B evaluation". 
+This is also known as a "Type B evaluation".
 
-`mixed`:: Based on a combination of statistical analysis and scientific judgement, i.e. a combination of the `statistical` and `scientific_judgement` methods. 
+`mixed`:: Based on a combination of statistical analysis and scientific judgement, i.e. a combination of the `statistical` and `scientific_judgement` methods.
 
 The **`uncertainty_evaluation`** attribute is optional, and there is no default value.
-Note that an evaluation method does not imply a particular kind of uncertainty, for instance systematic and random uncertainty can both be evaluated using either the `statistical` or `scientific_judgement` methods.  
+Note that an evaluation method does not imply a particular kind of uncertainty, for instance systematic and random uncertainty can both be evaluated using either the `statistical` or `scientific_judgement` methods.
 
 ==== uncertainty_component  
 
 The **`uncertainty_component`** attribute describes the component of the uncertainty represented by the uncertainty variable.
 In general, the description is given as non-standardized text (e.g. `Uncertainty correlated over synoptic scales`).
 The special value of `combined_uncertainty` indicates that the uncertainty variable represents the combined uncertainty (i.e. the overall uncertainty in the data variable), and at most one of a data variable's uncertainty variables can have this attribute value.
-The attribute is optional and there is no default value. 
+The attribute is optional and there is no default value.
 
 When there is no combined_uncertainty component, it is assumed that the uncertainty components are all independent of each other (i.e. there is no inter-component correlation).
-When a combined uncertainty component is present, there is no assumption about the independence of the other components. 
+When a combined uncertainty component is present, there is no assumption about the independence of the other components.
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-components]]
 [caption="Example 10.5. "]
-.TODO
+.Uncertainty components
 ====
 ----
 dimensions: 
@@ -304,9 +306,9 @@ variables:
     u_systematic:uncertainty_component = "Correlated over synoptic scales" ; 
 ----
 
-Multiple uncertainty components, including the combined uncertainty, described by their uncertainty_component attributes.
+Multiple uncertainty components, including the combined uncertainty, described by their **`uncertainty_component`** attributes.
 Other uncertainty attributes have been omitted for clarity.
-Note that not all uncertainty variables need to have the same set of dimensions. 
+Note that not all uncertainty variables need to have the same set of dimensions.
 
 ====
 
@@ -322,24 +324,24 @@ The optional **`error_correlation`** attribute may be used to describe the corre
 
 The **`probability_distribution`** attribute of an uncertainty variable describes the mathematical form of the probability distribution from which the coverage interval is derived (i.e. the probability distribution that characterizes the dispersion of the values that could reasonably be attributed to the data variable).
 In general the attribute is optional, and there is no default value.
-However, the attribute must be set if the coverage_interval attribute is standard_deviation. 
+However, the attribute must be set if the **`coverage_interval`** attribute is `standard_deviation`.
 
 The **`probability_distribution`** attribute is a string attribute of the form: "__distribution_name [(moment: value [moment: value ...])]__", where square brackets indicate optional content.
-The "__distribution_name__" keyword identifies the mathematical form of the probability distribution, and the optional "__moment: value__" pairs provide statistical moments of the probability distribution. 
+The "__distribution_name__" keyword identifies the mathematical form of the probability distribution, and the optional "__moment: value__" pairs provide statistical moments of the probability distribution.
 
-The "__distribution_name__" must be one of the probability distribution names defined in Appendix N: Controlled Vocabularies for Uncertainty Data (such as  `gaussian`). 
+The "__distribution_name__" must be one of the probability distribution names defined in <<uncertainty-cv>> (such as `gaussian`).
 
 A statistical moment is defined by a "__moment: value__" pair.
-The type of moment is named by the "__moment__" keyword, and must be one of the moment names defined in Appendix N: Controlled Vocabularies for Uncertainty Data  (such as `kurtosis`).
-The "__value__" names a moment variable whose data array contains the moment values, and which may have attributes to describe it (such as **`units`** or  **`standard_name`**). 
+The type of moment is named by the "__moment__" keyword, and must be one of the moment names defined in <<uncertainty-cv>> (such as `kurtosis`).
+The "__value__" names a moment variable whose data array contains the moment values, and which may have attributes to describe it (such as **`units`** or  **`standard_name`**).
 
 A moment variable must have all or a subset of the dimensions of the uncertainty variable to which it is related.
 The order of dimensions of a moment variable is not restricted; it does not have to be the same as for the parent uncertainty variable.
-If a moment variable of an uncertainty variable that has been compressed by gathering does not span the compressed dimension (Section 8.2, "Lossless Compression by Gathering"), then the subset of the parent uncertainty variable dimensions is restricted to the uncertainty variable's uncompressed dimensions, i.e. it may have any of the dimensions listed by the compress attribute of the compressed coordinate variable, as well as any of the other dimensions of the uncertainty variable (those apart from the compressed dimension).  
+If a moment variable of an uncertainty variable that has been compressed by gathering does not span the compressed dimension (<<compression-by-gathering>>), then the subset of the parent uncertainty variable dimensions is restricted to the uncertainty variable's uncompressed dimensions, i.e. it may have any of the dimensions listed by the compress attribute of the compressed coordinate variable, as well as any of the other dimensions of the uncertainty variable (those apart from the compressed dimension).
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-distribution]]
 [caption="Example 10.6. "]
-.TODO
+.Uncertainty probability distribution
 ====
 ----
 dimensions: 
@@ -376,27 +378,27 @@ The errors are characterized by a skew-normal distribution, which is further def
 
 The uncertainty variable array provides a measure of the magnitude of the error in the data variable at each domain location.
 The error-correlations describe the pattern, independently of the magnitude of the errors themselves, of statistical relationships between the unknown actual errors at different domain locations.
-For instance, this information can be used for assessing the uncertainty of derived products (such as those formed by averaging, or by subtraction of a statistical norm), and for the weighting of observations when updating numerical models via data assimilation systems. 
+For instance, this information can be used for assessing the uncertainty of derived products (such as those formed by averaging, or by subtraction of a statistical norm), and for the weighting of observations when updating numerical models via data assimilation systems.
 
 Error correlation information may be defined by the uncertainty variable's **`error_correlation`** attribute, which relates data variable dimensions to matrices of error-correlation coefficients (possibly in parametric form), or to a non-standardized description of the error-correlation structure, or both.
 In particular, the parametric form of an error-correlation matrix always names the structural type of the correlations (such as uncorrelated or fully_correlated), providing physical insight into the error structure.
-The allowed parametric forms are defined in Appendix N: Controlled Vocabularies for Uncertainty Data.  
+The allowed parametric forms are defined in <<uncertainty-cv>>.
 
 Error-correlation information may be given for any dimensions of the data variable, including any that are not spanned by the uncertainty variable.
-This is because, even though the probability distribution characterized by the uncertainty variable does not depend on such dimensions, the error correlations along them may still have different characteristics to those of other dimensions.  
+This is because, even though the probability distribution characterized by the uncertainty variable does not depend on such dimensions, the error correlations along them may still have different characteristics to those of other dimensions.
 
 The **`error_correlation`** attribute may be used to describe the correlations of errors across the domain.
 Error correlations are defined as correlation coefficients which must be in the range −1 (perfect negative correlation) to +1 (perfect positive correlation), and 0 indicates no correlation.
-The attribute is optional and there is no default value. 
+The attribute is optional and there is no default value.
 
 In general, error correlations are given in the form of an error-correlation matrix that provides the error-correlation coefficients between all pairs of locations along one or more dimensions of the data variable (see form 1, below).
 However, when the correlation structure is parameterizable, the parameters that fully define the error-correlation matrix may be provided instead, which can not only significantly reduce the dataset size, but also provides physical insight regarding the error-correlation structure (see form 2, below).
-In addition, non-standardized text describing the error-correlation structure may be used instead of, or in addition to, an error-correlation matrix or its parameterized structure (see form 3, below).  
+In addition, non-standardized text describing the error-correlation structure may be used instead of, or in addition to, an error-correlation matrix or its parameterized structure (see form 3, below).
 
 Error-correlations are provided instead of any other joint-dispersion measure (e.g. error-covariance) because they allow the pattern of error connectivity to be completely de-coupled from the uncertainty magnitudes.
 This de-coupling allows the error-correlation structure to be parameterized (see form 2, below), and also allows the same structure to be re-used across multiple uncertainty variables.
 A corresponding joint-dispersion measure that combines the error pattern with the error magnitude may be reconstructed by pre- and post-multiplying the dimensionless error-correlation matrix (which by definition has ones on its main diagonal) with a diagonal matrix of uncertainty magnitudes.
-For instance, this will be the error-covariance when the uncertainty values are standard deviations of the probability distribution. 
+For instance, this will be the error-covariance when the uncertainty values are standard deviations of the probability distribution.
 
 The **`error_correlation`** attribute is a string attribute comprising a list of one or more blank-separated elements, the order of which is not significant.
 Each element has one of the following forms, where square brackets indicate optional content, and different elements may have different forms: 
@@ -418,7 +420,7 @@ Each element has one of the following forms, where square brackets indicate opti
 ** *3a*. "__[dim:] (comment)__"
 
 In all forms, "__dim__" names a dimension of the parent data variable to which the error correlation information applies.
-A dimension can appear at most once anywhere in the error_correlation attribute, and not all parent data variable dimensions need to be referenced. 
+A dimension can appear at most once anywhere in the **`error_correlation`** attribute, and not all parent data variable dimensions need to be referenced.
 
 In *form 1a*, "__error_correlation_var__" names an __error-correlation variable__ that contains a square matrix of numeric correlation coefficients between the errors for every pair of cells indexed by the given dimension, and can be used when the errors for the given dimension are independent of those for all other dimensions.
 The variable has the given dimension, and a different dimension of the same size that is not one of the parent data variable dimensions.
@@ -426,34 +428,34 @@ The correlation between the errors at i-th and j-th positions of the given dimen
 Each error-correlation coefficient is in the range −1 to 1.
 The matrix must be symmetric and have ones on the main diagonal.
 An error-correlation variable must have dimensionless units.
-For instance, if the given dimension is time with size 360, then `time: varname` means that the error-correlation variable varname contains a 360 by 360 error-correlation matrix for the time dimension. 
+For instance, if the given dimension is time with size 360, then `time: varname` means that the error-correlation variable varname contains a 360 by 360 error-correlation matrix for the time dimension.
 
 *Form 1b* is similar to form 1a, but now the error-correlation variable provides error correlations for every pair of cells indexed by two or more dimensions simultaneously.
-The error-correlation matrix is square and indexes the given dimensions after they have been flattened in row-major order, i.e. the first of the dimensions given in the error_correlation attribute varies the slowest, and the last varies the fastest.
+The error-correlation matrix is square and indexes the given dimensions after they have been flattened in row-major order, i.e. the first of the dimensions given in the **`error_correlation`** attribute varies the slowest, and the last varies the fastest.
 The number of rows or columns in the matrix is therefore equal to the product of the sizes of the given dimensions.
 For instance, if the dimension lat has size 20 and dimension lon has size 30, then `lat: lon: varname` means that the error-correlation variable varname contains a 600 by 600 error-correlation matrix for the `lat` and `lon` dimensions that is composed of 400 non-overlapping square blocks, each of size 30 by 30.
 Each block along the main diagonal represents the error-correlations between pairs of cells on the `lon` dimension at a specific `lat` dimension location, and the off-diagonal blocks represent the correlations between pairs of cells on the `lon` dimension that have different `lat` dimension locations.
-To save space in the dataset, form 1b should only be used when the error-correlation structure is intrinsically coupled across the dimensions and cannot be calculated using the Kronecker product of smaller error-correlation matrices [KRONECKER]. 
+To save space in the dataset, form 1b should only be used when the error-correlation structure is intrinsically coupled across the dimensions, and cannot be calculated using the Kronecker product <<KRONECKER>> of error-correlation matrices that each apply to a single dimension.
 
 *Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names a defined error-correlation structural type that implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
-The allowed structural types are defined in Appendix N: Controlled Vocabularies for Uncertainty Data.
+The allowed structural types are defined in <<uncertainty-cv>>.
 For instance, when the errors are uncorrelated the error-correlation matrix is always the identity matrix, which can be parameterized with the structural type uncorrelated.
 The special case of there being no dimension is a convenience for the common case of the structural type being applied independently to each dimension of the parent data variable.
 For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `uncorrelated`, `lat: uncorrelated lon: uncorrelated`, and `lon: uncorrelated lat: uncorrelated` are equivalent.
-If the dimension is omitted then there can only be one element in the error_correlation string, because it implicitly references all of the data variable's dimensions.
-If the data writer expects "__error_correlation_structure__" to be interpreted as one of the standard structure type strings, then none of the variables in the dataset should be given a name identical to that of the string, because the encoding of an error-correlation variable takes precedence. 
+If the dimension is omitted then there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
+If the data writer expects "__error_correlation_structure__" to be interpreted as one of the standard structure type strings, then none of the variables in the dataset should be given a name identical to that of the string, because the encoding of an error-correlation variable takes precedence.
 
 *Form 2b* is similar to form 2a, but with the addition of standardized parameters for configuring the structural type.
 Parameters for configuring the structural type are given by the "__parameter: value__" pairs that identify a configuration parameter and provide its value.
-The allowed parameters for each structural type are given in Appendix N: Controlled Vocabularies for Uncertainty Data, which also specifies whether or not a parameter is allowed to take a default value when not present.
+The allowed parameters for each structural type are given in <<uncertainty-cv>>, which also specifies whether or not a parameter is allowed to take a default value when not present.
 In general, "__value__" names a scalar __error-correlation parameter variable__ that contains the parameter value in its data array, and may have attributes to describe it (such as **`units`** or a **`standard_name`**).
 However, in the special case that the parameter value is an integer with no units (such as a number of cells), then the "__value__" may alternatively be set as the decimal representation of that integer.
 For instance, the `triangle_relative` structural type must be configured with the parameter __n__, and for a parameter value of 50, this could be specified as either `n: 50` or `n: varname`, where `varname` is the name of a scalar variable with the value 50 in its data array.
-If the data writer expects "__value__" to be interpreted as an integer, then none of the variables in the dataset should be given a name identical to that of the string of digits, because the encoding of an error-correlation parameter variable takes precedence. 
+If the data writer expects "__value__" to be interpreted as an integer, then none of the variables in the dataset should be given a name identical to that of the string of digits, because the encoding of an error-correlation parameter variable takes precedence.
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-error-correlation-1d]]
 [caption="Example 10.7. "]
-.TODO
+.One-dimensional error correlations
 ====
 ----
 dimensions: 
@@ -488,20 +490,20 @@ Other uncertainty attributes have been omitted for clarity.
 For the `lat` dimension there is an error-correlation variable called correlations giving actual the error-correlation coefficients (form 1a).
 For the `time` dimension, that is not spanned by the uncertainty variable, the error-correlation coefficients are parameterized as uncorrelated (form 2a).
 For the `lon` dimension the error-correlation coefficients are parameterized as `bell_shaped_relative` with two configuration parameters, one of which is an error-correlation parameter variable called `sigma`, and one is an integer (form 2b).
-Note: To enhance readability of this example, the error_correlation attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
+Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-error-correlation-2d]]
 [caption="Example 10.8. "]
-.TODO
+.Multi-dimensional error correlations
 ====
 ----
 dimensions: 
   time = 30 ; 
   lat = 180 ; 
   lon = 360 ; 
-  lat_lon = 64800 ;
+  lat_lon = 64800 ;  // = 360 x 180
   lat_lon1 = 64800 ; 
 
 variables: 
@@ -521,18 +523,18 @@ variables:
 Error correlations described by an error-correlation matrix that demonstrates form 1b of the **`error_correlation`** attribute.
 Other uncertainty attributes have been omitted for clarity.
 For the `lat` and `lon` dimensions combined there is a single error-correlation variable called `correlations` giving the actual error-correlation coefficients.
-Note that error-correlation information in this case has not been provided for every dimension of the uncertainty or data variables. 
+Note that error-correlation information in this case has not been provided for every dimension of the uncertainty or data variables.
 
 ====
 
 In *form 3a*, the actual error-correlation coefficients for the given dimension are unknown, but nonetheless their structure may be described by non-standardized text given by the "__comment__".
 For instance, `time: (time scale = 1 day)` could be used to indicate the temporal scale over which the errors are correlated along the `time` dimension.
 The non-standardized information may optionally be preceded by the string "__comment:__" (e.g. `time: (comment: time scale = 1 day)`).
-Similarly to form 2a, the special case of there being no given dimension (e.g. `(length scale = 100 km)`) is a convenience for when the non-standardized information is to be applied independently to each dimension of the parent data variable, and in this case there can only be one element in the error_correlation string, because it implicitly references all of the data variable's dimensions. 
+Similarly to form 2a, the special case of there being no given dimension (e.g. `(length scale = 100 km)`) is a convenience for when the non-standardized information is to be applied independently to each dimension of the parent data variable, and in this case there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
 
-[[example-uncertainty-TODO]]
+[[example-uncertainty-error-correlation-comment]]
 [caption="Example 10.9. "]
-.TODO
+.Error correlations described by comments
 ====
 ----
 dimensions: 
@@ -556,10 +558,10 @@ variables:
  
 Error correlations described by non-standardized text that demonstrates form 3a of the **`error_correlation`** attribute.
 Other uncertainty attributes have been omitted for clarity.
-Note: To enhance readability of this example, the error_correlation attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly. 
+Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
 
 A non-standardized comment may also be provided for forms 1 and 2.
 In this case, the round brackets containing the non-standardized text are placed immediately after the error-correlation variable name or the error-correlation structural type (e.g. `lat: varname (length scale = 100km)`).
-In form 1 the comment may optionally be preceded by "__comment:__", but in form 2 the comment must be preceded by the string "__comment:__" in order to differentiate it from a standardized parameter (e.g. `lat: triangle_relative (n: 50 comment: length scale = 100 km)`). 
+In form 1 the comment may optionally be preceded by "__comment:__", but in form 2 the comment must be preceded by the string "__comment:__" in order to differentiate it from a standardized parameter (e.g. `lat: triangle_relative (n: 50 comment: length scale = 100 km)`).
