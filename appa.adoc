@@ -155,19 +155,19 @@ Identifies the roles of mesh topology and location index set variables (see <<ap
 
 | **`coverage_factor`**
 | N
-| U 
+| U
 | <<uncertainty-variable-attributes>>
 | Gives a positive numerical “coverage factor” for the coverage interval.
 
 | **`coverage_interval`**
 | S
-| U 
+| U
 | <<uncertainty-variable-attributes>>
 | Specifies how the uncertainty variable array defines the coverage interval.
 
 | **`coverage_probability`**
 | N
-| U 
+| U
 | <<uncertainty-variable-attributes>>
 | Contains the probability that the coverage interval contains the true data variable value.
 
@@ -179,7 +179,7 @@ Identifies the roles of mesh topology and location index set variables (see <<ap
 
 | **`error_correlation`**
 | S
-| U 
+| U
 | <<error-correlation>>
 | Used to describe the correlations of errors across the domain.
 
@@ -361,15 +361,15 @@ Allowed for auxiliary coordinate variables but not allowed for coordinate variab
 
 | **`probability_distribution`**
 | S
-| U 
+| U
 | <<probability-distribution>>
-| Used to describe the correlations of errors across the domain.
+| Used to describe the mathematical form of the probability distribution that characterizes the dispersion of the values that could reasonably be attributed to the data variable.
 
 | **`quantization`**
 | S
 | D
 | <<quantization-variables>>
-| Used to describe the mathematical form of the probability distribution that characterizes the dispersion of the values that could reasonably be attributed to the data variable.
+| Identifies a variable that defines a quantization algorithm and its provenance.
 
 | **`quantization_nsb`**
 | N
@@ -438,19 +438,19 @@ In cases where there is a strong constraint on dataset size, it is allowed to pa
 
 | **`uncertainty_component`**
 | S
-| U 
+| U
 | <<uncertainty-variable-attributes>>
 | Describes the component of the uncertainty represented by the uncertainty variable.
 
 | **`uncertainty_evaluation`**
 | S
-| U 
+| U
 | <<uncertainty-variable-attributes>>
 | Describes the method used to evaluate the uncertainty.
 
 | **`uncertainty_representation`**
 | S
-| 
+| U
 | <<uncertainty-variable-attributes>>
 | Specifies whether the uncertainty variable array represents absolute or relative differences to the data variable values.
 

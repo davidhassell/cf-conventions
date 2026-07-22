@@ -1,0 +1,122 @@
+[[uncertainty-cv, Appendix N, Controlled Vocabularies for Uncertainty Data]]
+
+[appendix]
+== Controlled Vocabularies for Uncertainty Data
+
+This appendix defines the controlled vocabularies required by some components of following uncertainty variable attributes:
+
+* **`probability_distribution`** (<<probability-distribution>>)
+
+* **`error_correlation`** (<<error-correlation>>)
+
+See <<uncertainty>> for the complete definition of uncertainty variables and their associated metadata.
+
+[[uncertainty-cv-distribution-type]]
+.Distributions allowed by the "__distribution__" component of the **`probability_distribution`** attribute
+[options="header",cols="4,12",caption="Table N.1. "]
+|===============
+| Distribution | Description
+
+| `gaussian`
+| Normal distribution.
+
+| `uniform` | A continuous probability distribution in which all values within a specified interval occur with equal likelihood, producing a flat probability density across the range.
+
+| `skewed_gaussian`
+| A continuous probability distribution that generalises the normal distribution to allow for non-zero skewness.
+
+| `log_normal`
+| A continuous probability distribution of a random variable whose logarithm is normally distributed.
+
+| `chi_squared`
+| The distribution of a asum of the squares of k independent standard normal random variables.
+|===============
+
+[[uncertainty-cv-distribution-parameter]]
+.Distribution parameters allowed by the "__parameter__" component of the **`probability_distribution`** attribute
+[options="header",cols="4,12",caption="Table N.2. "]
+|===============
+| Distribution parameter | Description
+
+| `skew`
+| A measure of the asymmetry of the probability distribution, given by the third standardized moment.
+
+| `kurtosis`
+| A measure of the degree of "tailedness" in the probability distribution, given by the fourth standardized moment.
+
+| `degrees_of_freedom`
+| The number of values in the calculation of a statistic that are free to vary.
+For instance, a `chi_squared` distributoin with __k__ degrees of freedom is the distribution of a sum of the squares of __k__ independent standard normal random variables.
+|===============
+
+[[uncertainty-cv-structural-type]]
+.Error-correlation structural types allowed by the "__error_correlation_structure__" component of the **`error_correlation`** attribute
+[options="header",cols="2,3,4,3",caption="Table N.3. "]
+|===============
+| Structural type
+| Description
+| Implied error-correlation matrix structure
+| Configuration parameters (see <<uncertainty-cv-structural-type-parameters, Table N.4>>)
+
+| `independent`
+| No error-correlation.
+| The identity matrix.
+a|
+
+| `common`
+| Full error-correlation.
+| A full matrix of ones.
+a|
+
+| `triangular`
+| Error-correlation drops linearly along the dimension.
+| A banded diagonal matrix, with values dropping off linearly from the diagonal.
+a| * `localisation_radius`
+
+| `exponential`
+| Error-correlation drops exponentially along the dimension.
+| A banded diagonal matrix, with values dropping off exponential from the diagonal.
+a| * `localisation_radius`
+* `e_folding_length`
+|===============
+
+[[uncertainty-cv-structural-type-parameters]]
+.Error-correlation structure parameters allowed by the "__parameter__" component of the **`error_correlation`** attribute
+[options="header",cols="2,8,2",caption="Table N.4. "]
+|===============
+| Structural type configuration parameter
+| Description
+| Applicable structural types (see <<uncertainty-cv-error-correlation-structure, Table N.3>>)
+
+| `localization_radius`
+| The distance along the dimension at which error-correlation reduces to zero.
+An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
+An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
+a| * `triangular`
+* `exponential`
+
+| `e_folding_length`
+| The distance along the dimension at which error-correlation reduces by a factor of __e__.
+An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
+An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
+a| * `exponential`
+|===============
+
+For convenience, <<uncertainty-cv-coverage-probabilities, Table N.5>> shows
+a selection of commonly used coverage probabilties that may be used with the `gaussian` probability distribution when the coverage interval is defined as a
+multiple (defined by the coverage factor) of one standard deviation.
+See <<uncertainty-variable-attributes>>.
+
+[[uncertainty-cv-coverage-probabilities]]
+.Selected coverage probabilities for the standard and expanded uncertainties of the Gaussian distribition
+[options="header",cols="4,12",caption="Table N.5. "]
+|===============
+| Coverage factor | Coverage probability
+
+| `1` | 0.6827
+| `1.645` | 0.9
+| `1.96` | 0.95
+| `2` | 0.9545
+| `2.576` | 0.99
+| `3` | 0.9973
+|===============

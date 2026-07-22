@@ -47,31 +47,31 @@ If an uncertainty variable of a data variable that has been compressed by gather
 .Standard uncertainty
 ====
 ----
-dimensions: 
-  time = 30 ; 
+dimensions:
+  time = 30 ;
 
-variables: 
-  // Data variable 
-  float q(time) ; 
-    q:standard_name = "specific_humidity" ; 
-    q:units = "g/g" ; 
-    q:uncertainty_variables = "q_uncertainty" ; 
-  // Uncertainty variable 
-  float q_uncertainty(time) ; 
-    q_uncertainty:standard_name = "specific_humidity" ; 
-    q_uncertainty:units = "g/g" ; 
-    q_uncertainty:coverage_interval = "standard_deviation" ; 
-    q_uncertainty:coverage_probability = 0.6827 ; 
+variables:
+  // Data variable
+  float q(time) ;
+    q:standard_name = "specific_humidity" ;
+    q:units = "g/g" ;
+    q:uncertainty_variables = "q_uncertainty" ;
+  // Uncertainty variable
+  float q_uncertainty(time) ;
+    q_uncertainty:standard_name = "specific_humidity" ;
+    q_uncertainty:units = "g/g" ;
+    q_uncertainty:coverage_interval = "standard_deviation" ;
+    q_uncertainty:coverage_probability = 0.6827 ;
     q_uncertainty:probability_distribution = "gaussian" ;
-    
-data: 
-  q = 0.024, 0.021, 0.046, ... ; 
-  q_uncertainty = 0.003, 0.001, 0.002, ... ; 
+
+data:
+  q = 0.024, 0.021, 0.046, ... ;
+  q_uncertainty = 0.003, 0.001, 0.002, ... ;
 ----
 
 The uncertainty variable `q_uncertainty` contains the standard deviation (σ, the standard uncertainty) of the Gaussian distribution that characterizes the errors in the data variable `q`.
 The probability that the true values of `q` are within σ of its actual array values is 0.6827.
-For instance, for the first element of the time dimension the measured value of specific humidity is 0.024, and there is a 68.27% chance that its true value lies in the range [0.021, 0.027]. 
+For instance, for the first element of the `time` dimension the measured value of specific humidity is 0.024, and there is a 68.27% chance that its true value lies in the range [0.021, 0.027].
 
 ====
 
@@ -80,33 +80,33 @@ For instance, for the first element of the time dimension the measured value of 
 .Asymmetric uncertainty coverage interval
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  interval_offset = 2 ; 
+dimensions:
+  time = 30 ;
+  interval_offset = 2 ;
 
-variables: 
-  // Data variable 
-  float q(time) ; 
-    q:standard_name = "specific_humidity" ; 
-    q:units = "g/g" ; 
-    q:uncertainty_variables = "q_uncertainty" ; 
-  // Uncertainty variable 
-  float q_uncertainty(time, interval_offset) ; 
-    q_uncertainty:standard_name = "specific_humidity" ; 
-    q_uncertainty:units = "g/g" ; 
-    q_uncertainty:coverage_interval = "offsets" ; 
-    q_uncertainty:coverage_probability = 0.9 ; 
+variables:
+  // Data variable
+  float q(time) ;
+    q:standard_name = "specific_humidity" ;
+    q:units = "g/g" ;
+    q:uncertainty_variables = "q_uncertainty" ;
+  // Uncertainty variable
+  float q_uncertainty(time, interval_offset) ;
+    q_uncertainty:standard_name = "specific_humidity" ;
+    q_uncertainty:units = "g/g" ;
+    q_uncertainty:coverage_interval = "offsets" ;
+    q_uncertainty:coverage_probability = 0.9 ;
 
-data: 
-  q = 0.024, 0.021, ... ; 
-  q_uncertainty = -0.006, 0.003, 
-                  -0.002, 0.004, 
-                  ... ; 
+data:
+  q = 0.024, 0.021, ... ;
+  q_uncertainty = -0.006, 0.003,
+                  -0.002, 0.004,
+                  ... ;
 ----
 
 The uncertainty variable `q_uncertainty` contains a coverage interval defined by lower and upper limits.
 The probability that the true values of the data variable `q` are within the coverage interval limits is 0.9.
-For instance, for the first element of the time dimension the measured value of specific humidity is 0.024, and there is a 90% chance that its true value lies in the range [0.018, 0.027].
+For instance, for the first element of the `time` dimension the measured value of specific humidity is 0.024, and there is a 90% chance that its true value lies in the range [0.018, 0.027].
 The probability distribution of the errors is unspecified.
 
 ====
@@ -122,52 +122,53 @@ It is deprecated to express uncertainty using an ancillary variable with the sta
 The coverage interval limits may alternatively be defined as relative differences (i.e. fractional or percentage differences, as opposed to difference offsets) to the data variable values, indicated by an **`uncertainty_representation`** attribute value of `relative_difference`.
 For a symmetric coverage interval defined by a single non-negative number (i.e. when the **`coverage_interval`** attribute is `standard_deviation` or `half_width`), the limits are reconstituted by multiplying the data variable value by the factors `1 − f` and `1 + f`, where `f` is the relative offset uncertainty array value expressed as a fraction.
 If the uncertainty is provided as a percentage, `f` is found by dividing the uncertainty array value by 100.
-For instance, for a data variable containing a measured value of 20 there could be a probability of 0.95 that the true value lies within the symmetrical coverage interval [15, 25], and the half-width could be stored in an uncertainty variable array as 25% or 0.25.
+For instance, for a data variable containing a measured value of 20 there could be a probability of 0.95 that the true value lies within the symmetrical coverage interval [15, 25], and the half-width could be stored in an uncertainty variable array as the relative values 25% or 0.25.
 
 For a coverage interval defined by two offsets stored in an interval dimension (i.e. when the **`coverage_interval`** attribute is `offsets`), the limits are reconstituted by multiplying the data variable value by the factors `1 + f` and `1 + g`, where `f` and `g` are the two relative offset uncertainty array values expressed as fractions.
-For instance, for a data variable containing a measured value of 20 there could be a probability of 0.9 that the true value lies within the asymmetric coverage interval [15, 30], in which case the coverage interval offsets could be stored in an uncertainty variable array as (−25%, 50%) or (−0.25, 0.5).
+For instance, for a data variable containing a measured value of 20 there could be a probability of 0.9 that the true value lies within the asymmetric coverage interval [15, 30], in which case the coverage interval offsets could be stored in an uncertainty variable array as the relative values (−25%, 50%) or (−0.25, 0.5).
 
 An uncertainty variable containing relative difference offsets does not represent the same physical quantity as the parent data variable, and must not have a **`standard_name`** attribute.
 It must have dimensionless units or units of percent, for fractional and percentage relative differences respectively.
-The uncertainty variable may be associated with any appropriate parent data variable, but it is not recommended to use relative differences when the data variable has array values of zero, or has on-scale units with a shifted origin (such as on-scale Celsius, see <<temperature-units>>), because there is a possibility that the coverage intervals reconstructed by the data reader are not those intended by the data writer.
-In the case of a zero data variable value, a non-zero relative difference offset always results in a zero-width coverage interval; and in the case of on-scale units with a shifted origin, the reconstructed coverage interval depends on whether the given data variable units are used, or if equivalent units with the origin unshifted are used instead.
+
+The uncertainty variable containing relative difference offsets may be associated with any number of parent data variables, but it is not recommended to use relative differences for a data variable whose array contains values of zero, or has on-scale units with a shifted origin (such as on-scale Celsius, see <<temperature-units>>), because there is a possibility that the coverage intervals reconstructed by the data reader are not those intended by the data writer.
+In the case of a data variable value of zero, relative difference offsets always result in a zero-width coverage interval; and in the case of on-scale units with a shifted origin, the calculated coverage interval depends on whether the given data variable units are used in the calculation, or if equivalent units with the origin unshifted are used instead.
 
 [[example-uncertainty-relative-difference]]
 [caption="Example 10.3. "]
 .Uncertainty defined as relative differences
 ====
 ----
-dimensions: 
-  time = 30 ; 
+dimensions:
+  time = 30 ;
 
-variables: 
-  // Data variables 
-  float skin(time) ; 
-    skin:standard_name = "sea_surface_skin_temperature" ; 
-    skin:units = "K" ; 
-    skin:units_metadata = "temperature: on_scale"; 
-    skin:uncertainty_variables = "uncertainty" ; 
-  float subskin(time) ; 
-    subskin:standard_name = "sea_surface_subskin_temperature" ; 
-    subskin:units = "K" ; 
-    subskin:units_metadata = "temperature: on_scale" ; 
-    subskin:uncertainty_variables = "uncertainty" ; 
-  // Uncertainty variable 
-  float uncertainty ; 
-    uncertainty:units = "%" ; 
-    uncertainty:uncertainty_representation = "relative_difference" ; 
-    uncertainty:coverage_interval = "half_width" ; 
-    uncertainty:coverage_probability = 0.9 ; 
+variables:
+  // Data variables
+  float skin(time) ;
+    skin:standard_name = "sea_surface_skin_temperature" ;
+    skin:units = "K" ;
+    skin:units_metadata = "temperature: on_scale" ;
+    skin:uncertainty_variables = "uncertainty" ;
+  float subskin(time) ;
+    subskin:standard_name = "sea_surface_subskin_temperature" ;
+    subskin:units = "K" ;
+    subskin:units_metadata = "temperature: on_scale" ;
+    subskin:uncertainty_variables = "uncertainty" ;
+  // Uncertainty variable
+  float uncertainty ;
+    uncertainty:units = "%" ;
+    uncertainty:uncertainty_representation = "relative_difference" ;
+    uncertainty:coverage_interval = "half_width" ;
+    uncertainty:coverage_probability = 0.9 ;
 
-data: 
-  skin = 283.15, 284.15, 282.9, ... ; 
-  subskin = 284.5, 283.9, 283.0, ... ; 
-  uncertainty = 1.0 ; 
+data:
+  skin = 283.15, 284.15, 282.9, ... ;
+  subskin = 284.5, 283.9, 283.0, ... ;
+  uncertainty = 1.0 ;
 ----
 
 The uncertainty variable `uncertainty` contains the half-width of the coverage interval that characterizes the errors in both the data variables `skin` and `subskin`, expressed as a relative percentage difference.
 For each element of the `time` dimension there is a 90% chance that the true value lies within 1% its data variable value.
-For instance, the first element of the `skin` variable is 283.15 and has a coverage interval of [280.3185, 285.9815]; and the first element of the `subskin` variable is 284.5 and has a coverage interval of [281.655, 287.345]. 
+For instance, the first element of the `skin` variable is 283.15 and has a coverage interval of [280.3185, 285.9815]; and the first element of the `subskin` variable is 284.5 and has a coverage interval of [281.655, 287.345].
 
 ====
 
@@ -177,15 +178,15 @@ For instance, the first element of the `skin` variable is 283.15 and has a cover
 An uncertainty variable has standardised attributes for defining how the array values characterize uncertainty in the data variable.
 Two of these attributes (**`coverage_interval`** and **`coverage_probability`**) must be set on all uncertainty variables, with the others being optional, or conditionally optional depending on the value of another attribute.
 
-The standardised attributes are as follows: 
+The standardised attributes are as follows:
 
 // Turn off section numbering for a bit
 :numbered!:
 
-===== coverage_interval  
+==== coverage_interval
 
 The **`coverage_interval`** attribute specifies how the uncertainty variable array defines the coverage interval.
-The attribute must be set, and takes one of the following values: 
+The attribute must be set, and takes one of the following values:
 
 `standard_deviation`:: The array has no interval dimension and contains the coverage interval's non-negative half-width that is equal to the standard deviation of the probability distribution defined by the **`probability_distribution`** attribute, which must also be set.
 One standard deviation of the probability distribution is also known as the "standard uncertainty".
@@ -195,25 +196,25 @@ However, if the **`coverage_factor`** attribute has a value other than 1, then t
 
 `offsets`:: The array has a size-two interval dimension that contains the offsets which define the lower and upper limits coverage interval.
 
-==== uncertainty_representation 
+==== coverage_probability
 
-The **`uncertainty_representation`** attribute specifies whether the uncertainty variable array represents absolute or relative differences to the data variable values, and takes one of the following values: 
+The **`coverage_probability`** attribute contains the probability, in the range 0 to 1, that the coverage interval contains the true data variable value.
+The attribute must be set. For convenience, <<uncertainty-cv-coverage-probabilities, Table N.5>> provides the coverage probabilities for coverage intervals for the standard uncertainty, and selected expanded uncertainties, of the Gaussian distribution.
+
+==== uncertainty_representation
+
+The **`uncertainty_representation`** attribute specifies whether the uncertainty variable array represents absolute or relative differences to the data variable values, and takes one of the following values:
 
 **`difference`**:: This is the default.
 The array contains values that are differences to the data variable values.
 
 **`relative_difference`**:: The array contains values that are fractional or percentage relative differences to the data variable.
 
-==== coverage_probability
-
-The **`coverage_probability`** attribute contains the probability, in the range 0 to 1, that the coverage interval contains the true data variable value.
-The attribute must be set, and <<uncertainty-cv>> provides the coverage probabilities for common coverage intervals based on the standard deviation of selected probability distributions.
-
-==== probability_distribution 
+==== probability_distribution
 
 The **`probability_distribution`** attribute describes the mathematical form of the probability distribution from which the coverage interval is derived, and is fully described in <<probability-distribution>>.
 
-==== coverage_factor 
+==== coverage_factor
 
 When the **`coverage_interval`** attribute is `standard_deviation`, the **`coverage_factor`** attribute gives a positive numerical "coverage factor" for the coverage interval.
 For values other than 1, the uncertainty variable represents an "expanded uncertainty", i.e. one for which the values in the uncertainty variable array are in fact the standard deviation of the probability distribution multiplied by the coverage factor.
@@ -226,27 +227,27 @@ The attribute is optional with a default value of 1, and must not be set if the 
 .Expanded uncertainty
 ====
 ----
-dimensions: 
-  time = 30 ; 
+dimensions:
+  time = 30 ;
 
-variables: 
-  // Data variable 
-  float q(time) ; 
-    q:standard_name = "specific_humidity" ; 
-    q:units = "g/g" ; 
-    q:uncertainty_variables = "q_uncertainty" ; 
-  // Uncertainty variable 
-  float q_uncertainty(time) ; 
-    q_uncertainty:standard_name = "specific_humidity" ; 
-    q_uncertainty:units = "g/g" ; 
-    q_uncertainty:coverage_interval = "standard_deviation" ; 
-    q_uncertainty:probability_distribution = "gaussian" ; 
-    q_uncertainty:coverage_probability = 0.9545 ; 
-    q_uncertainty:coverage_factor = 2 ; 
+variables:
+  // Data variable
+  float q(time) ;
+    q:standard_name = "specific_humidity" ;
+    q:units = "g/g" ;
+    q:uncertainty_variables = "q_uncertainty" ;
+  // Uncertainty variable
+  float q_uncertainty(time) ;
+    q_uncertainty:standard_name = "specific_humidity" ;
+    q_uncertainty:units = "g/g" ;
+    q_uncertainty:coverage_interval = "standard_deviation" ;
+    q_uncertainty:probability_distribution = "gaussian" ;
+    q_uncertainty:coverage_probability = 0.9545 ;
+    q_uncertainty:coverage_factor = 2 ;
 
-data: 
-  q = 0.024, 0.021, 0.106, ... ; 
-  q_uncertainty = 0.006, 0.002, 0.004, ... ;  
+data:
+  q = 0.024, 0.021, 0.106, ... ;
+  q_uncertainty = 0.006, 0.002, 0.004, ... ;
 ----
 
 The uncertainty variable `q_uncertainty` contains two standard deviations (2σ) of the Gaussian distribution that characterizes the errors in the data variable `q`.
@@ -255,9 +256,9 @@ For instance, for the first element of the `time` dimension the data variable va
 
 ====
 
-==== uncertainty_evaluation  
+==== uncertainty_evaluation
 
-The **`uncertainty_evaluation`** attribute describes the method used to evaluate the uncertainty, one of: 
+The **`uncertainty_evaluation`** attribute describes the method used to evaluate the uncertainty, one of:
 
 `statistical`:: Based on statistical analysis, i.e. obtained from a probability density function derived from an observed frequency distribution, such as a coverage interval derived from the standard error of the mean of an original sample.
 This is also known as a "Type A evaluation".
@@ -270,7 +271,7 @@ This is also known as a "Type B evaluation".
 The **`uncertainty_evaluation`** attribute is optional, and there is no default value.
 Note that an evaluation method does not imply a particular kind of uncertainty, for instance systematic and random uncertainty can both be evaluated using either the `statistical` or `scientific_judgement` methods.
 
-==== uncertainty_component  
+==== uncertainty_component
 
 The **`uncertainty_component`** attribute describes the component of the uncertainty represented by the uncertainty variable.
 In general, the description is given as non-standardized text (e.g. `Uncertainty correlated over synoptic scales`).
@@ -285,25 +286,25 @@ When a combined uncertainty component is present, there is no assumption about t
 .Uncertainty components
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  lat = 180 ; 
-  lon = 360 ; 
+dimensions:
+  time = 30 ;
+  lon = 360 ;
+  lat = 180 ;
 
-variables: 
-  // Data variable 
-  float sst(time, lat, lon) ; 
-    sst:standard_name = "sea_surface_temperature" ; 
-    sst:units = "K" ; 
-    sst:units_metadata = "temperature: on_scale" ; 
-    sst:uncertainty_variables = "u_total u_random u_systematic" ; 
-  // Uncertainty variables 
-  float u_total(time, lat, lon) ; 
-    u_total:uncertainty_component = "combined_uncertainty" ; 
-  float u_random(time, lat, lon) ; 
-    u_random:uncertainty_component = "Uncorrelated" ; 
-  float u_systematic(lat, lon) ; 
-    u_systematic:uncertainty_component = "Correlated over synoptic scales" ; 
+variables:
+  // Data variable
+  float sst(time, lat, lon) ;
+    sst:standard_name = "sea_surface_temperature" ;
+    sst:units = "K" ;
+    sst:units_metadata = "temperature: on_scale" ;
+    sst:uncertainty_variables = "u_total u_random u_systematic" ;
+  // Uncertainty variables
+  float u_total(time, lat, lon) ;
+    u_total:uncertainty_component = "combined_uncertainty" ;
+  float u_random(time, lat, lon) ;
+    u_random:uncertainty_component = "Uncorrelated" ;
+  float u_systematic(lat, lon) ;
+    u_systematic:uncertainty_component = "Correlated over synoptic scales" ;
 ----
 
 Multiple uncertainty components, including the combined uncertainty, described by their **`uncertainty_component`** attributes.
@@ -312,7 +313,7 @@ Note that not all uncertainty variables need to have the same set of dimensions.
 
 ====
 
-==== error_correlation 
+==== error_correlation
 
 The optional **`error_correlation`** attribute may be used to describe the correlations of errors across the domain, and is fully described in <<error-correlation>>.
 
@@ -326,10 +327,10 @@ The **`probability_distribution`** attribute of an uncertainty variable describe
 In general the attribute is optional, and there is no default value.
 However, the attribute must be set if the **`coverage_interval`** attribute is `standard_deviation`.
 
-The **`probability_distribution`** attribute is a string attribute of the form: "__distribution_type [(parameter: value [parameter: value ...])]__", where square brackets indicate optional content.
-The "__distribution_type__" keyword identifies the mathematical form of the probability distribution, and the optional "__parameter: value__" pairs provide parameters that define the distribution.
+The **`probability_distribution`** attribute is a string attribute of the form: "__distribution [(parameter: value [parameter: value ...])]__", where square brackets indicate optional content.
+The "__distribution__" keyword identifies the mathematical form of the probability distribution, and the optional "__parameter: value__" pairs provide parameters that define the distribution.
 
-The "__distribution_type__" must be one of the probability distribution names defined in <<uncertainty-cv-distribution-type, Table N.1>> (such as `gaussian`).
+The "__distribution__" must be one of the probability distribution names defined in <<uncertainty-cv-distribution-type, Table N.1>> (such as `gaussian`).
 
 A distribution parameter may be defined by a "__parameter: value__" pair.
 The type of parameter is named by the "__parameter__" keyword, and must be one of the distribution parameter names defined in <<uncertainty-cv-distribution-parameter, Table N.2>> (such as `skew`).
@@ -344,28 +345,28 @@ If a moment variable of an uncertainty variable that has been compressed by gath
 .Uncertainty probability distribution
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  interval_offset = 2 ; 
+dimensions:
+  time = 30 ;
+  interval_offset = 2 ;
 
-variables: 
-  // Data variable 
-  float q(time) ; 
-    q:standard_name = "specific_humidity" ; 
-    q:units = "g/g" ; 
-    q:uncertainty_variables = "q_uncertainty" ; 
-  // Uncertainty variable   
-  float q_uncertainty(time, interval_offset) ; 
-    q_uncertainty:standard_name = "specific_humidity" ; 
-    q_uncertainty:units = "g/g" ; 
-    q_uncertainty:coverage_interval = "offsets" ; 
-    q_uncertainty:coverage_probability = 0.9 ; 
+variables:
+  // Data variable
+  float q(time) ;
+    q:standard_name = "specific_humidity" ;
+    q:units = "g/g" ;
+    q:uncertainty_variables = "q_uncertainty" ;
+  // Uncertainty variable
+  float q_uncertainty(time, interval_offset) ;
+    q_uncertainty:standard_name = "specific_humidity" ;
+    q_uncertainty:units = "g/g" ;
+    q_uncertainty:coverage_interval = "offsets" ;
+    q_uncertainty:coverage_probability = 0.9 ;
     q_uncertainty:probability_distribution = "skewed_gaussian (skew: skew kurtosis: kurtosis)" ;
   // Distribution parameter variables
-  float skew(time) ; 
-    skew:units = "1" ; 
-  float kurtosis(time) ; 
-    kurtosis:units = "1" ; 
+  float skew(time) ;
+    skew:units = "1" ;
+  float kurtosis(time) ;
+    kurtosis:units = "1" ;
 ----
 The uncertainty variable `q_uncertainty` contains a coverage interval defined by lower and upper limits.
 The probability that the true values of the data variable `q` are within the coverage interval limits is 0.9.
@@ -374,7 +375,7 @@ The errors are characterized by a skew-normal distribution, which is further def
 ====
 
 [[error-correlation, Section 10.4, "Error correlation"]]
-=== Error correlation 
+=== Error correlation
 
 The uncertainty variable array provides a measure of the magnitude of the error in the data variable at each domain location.
 The error-correlations describe the pattern, independently of the magnitude of the errors themselves, of statistical relationships between the unknown actual errors at different domain locations.
@@ -401,53 +402,53 @@ A corresponding joint-dispersion measure that combines the error pattern with th
 For instance, this will be the error-covariance when the uncertainty values are standard deviations of the probability distribution.
 
 The **`error_correlation`** attribute is a string attribute comprising a list of one or more blank-separated elements, the order of which is not significant.
-Each element has one of the following forms, where square brackets indicate optional content, and different elements may have different forms: 
+Each element has one of the following forms, where square brackets indicate optional content, and different elements may have different forms:
 
-* *Form 1*. Error-correlation coefficients defined explicitly in an error-correlation matrix: 
+* *Form 1*. Error-correlation coefficients defined explicitly in an error-correlation matrix:
 
-** *1a*. "__dim: error_correlation_var [(comment)]__"
+** *1a*. "__dim: error_correlation_var [([comment: ]comment)]__"
 
-** *1b*. "__dim: dim: [dim: ...] error_correlation_var [(comment)]__"
+** *1b*. "__dim: dim: [dim: ...] error_correlation_var [([comment: ]comment)]__"
 
-* *Form 2*. Error-correlation coefficients defined implicitly by a parametric structure: 
+* *Form 2*. Error-correlation coefficients defined implicitly by a parametric structure:
 
 ** *2a*. "__[dim:] error_correlation_structure [(comment: comment)]__"
 
 ** *2b*. "__[dim:] error_correlation_structure (parameter: value [parameter: value ...] [comment: comment])__"
 
-* *Form 3*. Error-correlation coefficients characterized only by non-standardized text: 
+* *Form 3*. Error-correlation coefficients characterized only by non-standardized text:
 
-** *3a*. "__[dim:] (comment)__"
+** *3a*. "__[dim:] ([comment: ]comment)__"
 
 In all forms, "__dim__" names a dimension of the parent data variable to which the error correlation information applies.
 A dimension can appear at most once anywhere in the **`error_correlation`** attribute, and not all parent data variable dimensions need to be referenced.
 
 In *form 1a*, "__error_correlation_var__" names an __error-correlation variable__ that contains a square matrix of numeric correlation coefficients between the errors for every pair of cells indexed by the given dimension, and can be used when the errors for the given dimension are independent of those for all other dimensions.
-The variable has the given dimension, and a different dimension of the same size that is not one of the parent data variable dimensions.
+The error-correlation variable has the given dimension, and a different dimension of the same size that is not one of the parent data variable dimensions.
 The correlation between the errors at i-th and j-th positions of the given dimension is stored at the intersection of the i-th row and j-th column of the matrix.
-Each error-correlation coefficient is in the range −1 to 1.
+Each error-correlation coefficient must be in the range −1 to 1.
 The matrix must be symmetric and have ones on the main diagonal.
 An error-correlation variable must have dimensionless units.
-For instance, if the given dimension is time with size 360, then `time: varname` means that the error-correlation variable varname contains a 360 by 360 error-correlation matrix for the time dimension.
+For instance, if the given dimension is `time` with size 360, then `time: varname` means that the error-correlation variable `varname` contains a 360 by 360 error-correlation matrix for the `time` dimension.
 
 *Form 1b* is similar to form 1a, but now the error-correlation variable provides error correlations for every pair of cells indexed by two or more dimensions simultaneously.
 The error-correlation matrix is square and indexes the given dimensions after they have been flattened in row-major order, i.e. the first of the dimensions given in the **`error_correlation`** attribute varies the slowest, and the last varies the fastest.
 The number of rows or columns in the matrix is therefore equal to the product of the sizes of the given dimensions.
-For instance, if the dimension lat has size 20 and dimension lon has size 30, then `lat: lon: varname` means that the error-correlation variable varname contains a 600 by 600 error-correlation matrix for the `lat` and `lon` dimensions that is composed of 400 non-overlapping square blocks, each of size 30 by 30.
+For instance, if the dimension `lat` has size 20 and dimension `lon` has size 30, then `lat: lon: varname` means that the error-correlation variable `varname` contains a 600 by 600 error-correlation matrix for the `lat` and `lon` dimensions that is composed of 400 non-overlapping square blocks, each of size 30 by 30.
 Each block along the main diagonal represents the error-correlations between pairs of cells on the `lon` dimension at a specific `lat` dimension location, and the off-diagonal blocks represent the correlations between pairs of cells on the `lon` dimension that have different `lat` dimension locations.
 To save space in the dataset, form 1b should only be used when the error-correlation structure is intrinsically coupled across the dimensions, and cannot be calculated using the Kronecker product <<KRONECKER>> of error-correlation matrices that each apply to a single dimension.
 
-*Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names a defined error-correlation structural type that implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
-The allowed structural types are defined in <<uncertainty-cv-structural-type, Table N.3>>.
-For instance, when the errors are uncorrelated the error-correlation matrix is always the identity matrix, which can be parameterized with the structural type uncorrelated.
+*Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names an error-correlation structural type which implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
+The structural type must be one of the those defined in <<uncertainty-cv-structural-type, Table N.3>>.
+For instance, when the errors are independent (i.e. uncorrelated) the error-correlation matrix is always the identity matrix, which can be parameterized with the structural type `independent`.
 The special case of there being no dimension is a convenience for the common case of the structural type being applied independently to each dimension of the parent data variable.
-For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `uncorrelated`, `lat: uncorrelated lon: uncorrelated`, and `lon: uncorrelated lat: uncorrelated` are equivalent.
+For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `independent`, `lat: independent lon: independent`, and `lon: independent lat: independent` are equivalent.
 If the dimension is omitted then there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
-If the data writer expects "__error_correlation_structure__" to be interpreted as one of the standard structure type strings, then none of the variables in the dataset should be given a name identical to that of the string, because the encoding of an error-correlation variable takes precedence.
+If the data writer expects "__error_correlation_structure__" to be interpreted as one of the structural type strings defined in <<uncertainty-cv-structural-type, Table N.3>>, then none of the variables in the dataset should be given a name identical to that of the string, because the encoding of an error-correlation variable takes precedence.
 
 *Form 2b* is similar to form 2a, but with the addition of standardized parameters for configuring the structural type.
 Parameters for configuring the structural type are given by the "__parameter: value__" pairs that identify a configuration parameter and provide its value.
-The allowed parameters for each structural type are given in <<uncertainty-cv-structural-type-parameters, Table N.4>>.
+Each parameter must be one of those defined in <<uncertainty-cv-structural-type-parameters, Table N.4>>, which also specifies the structural types that the parameter may be paired with.
 In general, "__value__" names a scalar __error-correlation parameter variable__ that contains the parameter value in its data array, and may have attributes to describe it (such as **`units`** or a **`standard_name`**).
 However, in the special case that the parameter value is an integer with no units (such as a number of cells), then the "__value__" may alternatively be set as the decimal representation of that integer.
 For instance, the `trianglar` structural type must be configured with the parameter __n__, and for a parameter value of 50, this could be specified as either `n: 50` or `n: varname`, where `varname` is the name of a scalar variable with the value 50 in its data array.
@@ -458,74 +459,74 @@ If the data writer expects "__value__" to be interpreted as an integer, then non
 .One-dimensional error correlations
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  lat = 180 ; 
-  lon = 360 ; 
-  lat1 = 180 ; 
+dimensions:
+  time = 30 ;
+  lon = 360 ;
+  lat = 180 ;
+  lat1 = 180 ;
 
-variables: 
-  // Data variable 
-  float sst(time, lat, lon) ; 
-    sst:standard_name = "sea_surface_temperature" ; 
-    sst:units = "K" ; 
-    sst:units_metadata = "temperature: on_scale" ; 
-    sst:uncertainty_variables = "unc" ; 
-  // Uncertainty variable 
-  float unc(lat, lon) ; 
+variables:
+  // Data variable
+  float sst(time, lat, lon) ;
+    sst:standard_name = "sea_surface_temperature" ;
+    sst:units = "K" ;
+    sst:units_metadata = "temperature: on_scale" ;
+    sst:uncertainty_variables = "unc" ;
+  // Uncertainty variable
+  float unc(lat, lon) ;
     unc:error_correlation = "lat: correlations
                              time: uncorrelated
-                             lon: triangular (n: 15)" ; 
-  // Error-correlation variable 
-  float correlations(lat, lat1) ; 
-  // Error-correlation parameter variable 
-  float sigma ; 
-    sigma:standard_name = "sea_surface_temperature" ; 
-    sigma:units = "K" ; 
-    sigma:units_metadata = "temperature: difference" ; 
+                             lon: triangular (localisation_radius: 15)" ;
+  // Error-correlation variable
+  float correlations(lat, lat1) ;
+  // Error-correlation parameter variable
+  float sigma ;
+    sigma:standard_name = "sea_surface_temperature" ;
+    sigma:units = "K" ;
+    sigma:units_metadata = "temperature: difference" ;
 ----
- 
+
 Error correlations described by error-correlation matrices that demonstrate forms 1a, 2a, and 2b of the **`error_correlation`** attribute.
 Other uncertainty attributes have been omitted for clarity.
 For the `lat` dimension there is an error-correlation variable called correlations giving actual the error-correlation coefficients (form 1a).
 For the `time` dimension, that is not spanned by the uncertainty variable, the error-correlation coefficients are parameterized as uncorrelated (form 2a).
-For the `lon` dimension the error-correlation coefficients are parameterized as the `triangular` error-correlation structural type, with the configuration parameter `n` given as an integer (number of grid cells) within the  **`error_correlation`** attribute (form 2b).
+For the `lon` dimension the error-correlation coefficients are parameterized as the `triangular` error-correlation structural type, with the configuration parameter `localisation_radius` given as an integer (number of grid cells) within the  **`error_correlation`** attribute (form 2b).
 Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
 
 [[example-uncertainty-error-correlation-1d-b]]
 [caption="Example 10.8. "]
-.One-dimensional error correlations with an error-correlation parameter variable 
+.One-dimensional error correlations with an error-correlation parameter variable
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  lat = 180 ; 
-  lon = 360 ; 
-  lat1 = 180 ; 
+dimensions:
+  time = 30 ;
+  lon = 360 ;
+  lat = 180 ;
+  lat1 = 180 ;
 
-variables: 
-  // Data variable 
-  float sst(time, lat, lon) ; 
-    sst:standard_name = "sea_surface_temperature" ; 
-    sst:units = "K" ; 
-    sst:units_metadata = "temperature: on_scale" ; 
-    sst:uncertainty_variables = "unc" ; 
-  // Uncertainty variable 
-  float unc(lat, lon) ; 
+variables:
+  // Data variable
+  float sst(time, lat, lon) ;
+    sst:standard_name = "sea_surface_temperature" ;
+    sst:units = "K" ;
+    sst:units_metadata = "temperature: on_scale" ;
+    sst:uncertainty_variables = "unc" ;
+  // Uncertainty variable
+  float unc(lat, lon) ;
     unc:error_correlation = "lat: correlations
                              time: uncorrelated
-                             lon: triangular (n: x)" ; 
-  // Error-correlation variable 
-  float correlations(lat, lat1) ; 
-  // Error-correlation parameter variable 
-  float x ; 
-    x:units = "m" ; 
+                             lon: triangular (localisation_radius: r)" ;
+  // Error-correlation variable
+  float correlations(lat, lat1) ;
+  // Error-correlation parameter variable
+  float r ;
+    localisation_radius:units = "m" ;
 
 ----
 
-As for example <<example-uncertainty-error-correlation-1d, Example 10.7>>, but now the configuration parameter `n` of the `triangular` error-correlation structural type is provided by the error-correlation parameter variable `x`, which gives the parameter value in units of metres.
+As for example <<example-uncertainty-error-correlation-1d, Example 10.7>>, but now the configuration parameter `localisation_radius` of the `triangular` error-correlation structural type is provided by the error-correlation parameter variable `r`, which gives the parameter value in units of metres.
 Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
@@ -535,69 +536,70 @@ Note: To enhance readability of this example, the **`error_correlation`** attrib
 .Multi-dimensional error correlations
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  lat = 180 ; 
-  lon = 360 ; 
-  lat_lon = 64800 ;  // = 360 x 180
-  lat_lon1 = 64800 ; 
+dimensions:
+  time = 30 ;
+  lon = 360 ;
+  lat = 180 ;
+  lat_lon = 64800 ;
+  lat_lon1 = 64800 ;
 
-variables: 
-  // Data variable 
-  float sst(time, lat, lon) ; 
-    sst:standard_name = "sea_surface_temperature" ; 
-    sst:units = "K" ; 
-    sst:units_metadata = "temperature: on_scale" ; 
-    sst:uncertainty_variables = "unc" ; 
-  // Uncertainty variable 
-  float unc(time, lat, lon) ; 
-    unc:error_correlation = "lat: lon: correlations" ; 
-  // Error-correlation variable 
-  float correlations(lat_lon, lat_lon1) ; 
+variables:
+  // Data variable
+  float sst(time, lat, lon) ;
+    sst:standard_name = "sea_surface_temperature" ;
+    sst:units = "K" ;
+    sst:units_metadata = "temperature: on_scale" ;
+    sst:uncertainty_variables = "unc" ;
+  // Uncertainty variable
+  float unc(time, lat, lon) ;
+    unc:error_correlation = "lat: lon: correlations" ;
+  // Error-correlation variable
+  float correlations(lat_lon, lat_lon1) ;
 ----
- 
+
 Error correlations described by an error-correlation matrix that demonstrates form 1b of the **`error_correlation`** attribute.
 Other uncertainty attributes have been omitted for clarity.
-For the `lat` and `lon` dimensions combined there is a single error-correlation variable called `correlations` giving the actual error-correlation coefficients.
-Note that error-correlation information in this case has not been provided for every dimension of the uncertainty or data variables.
+For the `lat` and `lon` dimensions combined there is a single error-correlation variable called `correlations`. This variable's data is a 64800 by 64800 matrix, where `64800 = 180 x 360`, i.e. the product of the sizes of the `lat` and `lon` dimensions.
+Note that error-correlation information does not need to be provided for every data variable dimension, as is this case here.
 
 ====
 
 In *form 3a*, the actual error-correlation coefficients for the given dimension are unknown, but nonetheless their structure may be described by non-standardized text given by the "__comment__".
 For instance, `time: (time scale = 1 day)` could be used to indicate the temporal scale over which the errors are correlated along the `time` dimension.
-The non-standardized information may optionally be preceded by the string "__comment:__" (e.g. `time: (comment: time scale = 1 day)`).
+The non-standardized information may optionally be preceded by the string "__comment:__" (e.g. `time: (comment: time scale = 1 day)`), but is recommended to not do this.
 Similarly to form 2a, the special case of there being no given dimension (e.g. `(length scale = 100 km)`) is a convenience for when the non-standardized information is to be applied independently to each dimension of the parent data variable, and in this case there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
+
+A non-standardized comment providing extra information about the error-correlations may also be provided for forms 1 and 2.
+In this case, the round brackets containing the non-standardized text are placed immediately after the error-correlation variable name or the error-correlation structural type (e.g. `lat: varname (length scale = 100km)`).
+In form 1 the comment may optionally be preceded by the string "__comment:__", but is recommended to not do this.
+In form 2 the comment must be preceded by the string "__comment:__" in order to distinguish it from a standardized parameter, and the comment must be placed after any parameter definitions (e.g. `lat: triangle (location_radius: 50 comment: length scale = 100 km)`).
 
 [[example-uncertainty-error-correlation-comment]]
 [caption="Example 10.10. "]
 .Error correlations described by comments
 ====
 ----
-dimensions: 
-  time = 30 ; 
-  lat = 180 ; 
-  lon = 360 ; 
+dimensions:
+  time = 30 ;
+  lon = 360 ;
+  lat = 180 ;
 
-variables: 
-  // Data variable 
-  float sst(time, lat, lon) ; 
-    sst:standard_name = "sea_surface_temperature" ; 
-    sst:units = "K" ; 
-    sst:units_metadata = "temperature: on_scale" ; 
-    sst:uncertainty_variables = "unc" ; 
-  // Uncertainty variable 
-  float unc(time, lat, lon) ; 
-    unc:error_correlation = "time: (time scale = 1 day) 
-                             lat: (length scale: 100 km) 
-                             lon: (length scale: 100 km)" ; 
+variables:
+  // Data variable
+  float sst(time, lat, lon) ;
+    sst:standard_name = "sea_surface_temperature" ;
+    sst:units = "K" ;
+    sst:units_metadata = "temperature: on_scale" ;
+    sst:uncertainty_variables = "unc" ;
+  // Uncertainty variable
+  float unc(time, lat, lon) ;
+    unc:error_correlation = "time: (time scale = 1 day)
+                             lat: (length scale: 100 km)
+                             lon: (length scale: 100 km)" ;
 ----
- 
+
 Error correlations described by non-standardized text that demonstrates form 3a of the **`error_correlation`** attribute.
 Other uncertainty attributes have been omitted for clarity.
 Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
-
-A non-standardized comment may also be provided for forms 1 and 2.
-In this case, the round brackets containing the non-standardized text are placed immediately after the error-correlation variable name or the error-correlation structural type (e.g. `lat: varname (length scale = 100km)`).
-In form 1 the comment may optionally be preceded by "__comment:__", but in form 2 the comment must be preceded by the string "__comment:__" in order to differentiate it from a standardized parameter (e.g. `lat: triangle_relative (n: 50 comment: length scale = 100 km)`).
