@@ -56,7 +56,7 @@ For instance, a `chi_squared` distributoin with __k__ degrees of freedom is the 
 | Structural type
 | Description
 | Implied error-correlation matrix structure
-| Configuration parameters (see <<uncertainty-cv-structural-type-parameters, Table N.4>>)
+| Optional configuration parameters (see <<uncertainty-cv-structural-type-parameters, Table N.4>>)
 
 | `independent`
 | No error-correlation.
@@ -82,7 +82,7 @@ a| * `localisation_radius`
 
 [[uncertainty-cv-structural-type-parameters]]
 .Error-correlation structure parameters allowed by the "__parameter__" component of the **`error_correlation`** attribute
-[options="header",cols="2,8,2",caption="Table N.4. "]
+[options="header",cols="2,8,3",caption="Table N.4. "]
 |===============
 | Structural type configuration parameter
 | Description
@@ -90,22 +90,22 @@ a| * `localisation_radius`
 
 | `localization_radius`
 | The distance along the dimension at which error-correlation reduces to zero.
-An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
-An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
-a| * `triangular`
-* `exponential`
+An error-correlation parameter variable may have any dimensional units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension), or have dimensionless units to indicate that the distance is defined by a number of grid cells.
+An integer within the **`error_correlation`** attribute string defines a number of grid cells.
+a| * `exponential`
+* `triangular`
+
 
 | `e_folding_length`
 | The distance along the dimension at which error-correlation reduces by a factor of __e__.
-An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
-An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
+An error-correlation parameter variable may either have any dimensional units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension), or have dimensionless units to indicate that the distance is defined by a number of grid cells.
+An integer within the **`error_correlation`** attribute string defines a number of grid cells.
 a| * `exponential`
 |===============
 
 For convenience, <<uncertainty-cv-coverage-probabilities, Table N.5>> shows
-a selection of commonly used coverage probabilties that may be used with the `gaussian` probability distribution when the coverage interval is defined as a
-multiple (defined by the coverage factor) of one standard deviation.
-See <<uncertainty-variable-attributes>>.
+a selection of commonly used coverage probabilties that may be used when the coverage interval is defined as a multiple (i.e. the coverage factor) of one standard deviation either side of the mean of a Gaussian probability distribution.
+See <<uncertainty-variable-attributes>>. These values are only relevant when the **`coverage_interval`** attribute is `standard_deviation` and the **`probability_distribution`** attribute is `gaussian`; the coverage factor is defined by the **`coverage_factor`** attribute.
 
 [[uncertainty-cv-coverage-probabilities]]
 .Selected coverage probabilities for the standard and expanded uncertainties of the Gaussian distribition
