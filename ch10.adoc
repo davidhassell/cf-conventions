@@ -120,11 +120,12 @@ It is deprecated to express uncertainty using an ancillary variable with the sta
 === Relative differences
 
 The coverage interval limits may alternatively be defined as relative differences (i.e. fractional or percentage differences, as opposed to difference offsets) to the data variable values, indicated by an **`uncertainty_representation`** attribute value of `relative_difference`.
-For a symmetric coverage interval defined by a single non-negative number (i.e. when the **`coverage_interval`** attribute is `standard_deviation` or `half_width`), the limits are reconstituted by multiplying the data variable value by the factors `1 − f` and `1 + f`, where `f` is the relative offset uncertainty array value expressed as a fraction.
+For a symmetric coverage interval defined by a single non-negative number (i.e. when the **`coverage_interval`** attribute is `standard_deviation` or `half_width`), the limits are reconstituted by multiplying the data variable value by the factors `1 - f` and `1 + f`, where `f` is the relative offset uncertainty array value expressed as a fraction.
 If the uncertainty is provided as a percentage, `f` is found by dividing the uncertainty array value by 100.
 For instance, for a data variable containing a measured value of 20 there could be a probability of 0.95 that the true value lies within the symmetrical coverage interval [15, 25], and the half-width could be stored in an uncertainty variable array as the relative values 25% or 0.25.
 
-For a coverage interval defined by two offsets stored in an interval dimension (i.e. when the **`coverage_interval`** attribute is `offsets`), the limits are reconstituted by multiplying the data variable value by the factors `1 + f` and `1 + g`, where `f` and `g` are the two relative offset uncertainty array values expressed as fractions.
+For a coverage interval defined by two offsets stored in an interval dimension (i.e. when the **`coverage_interval`** attribute is `offsets`), the limits are reconstituted by multiplying the data variable value by the factors `1 + f` and `1 + g`, where `f` and `g` are the two relative offset uncertainty array values expressed as
+fractions.
 For instance, for a data variable containing a measured value of 20 there could be a probability of 0.9 that the true value lies within the asymmetric coverage interval [15, 30], in which case the coverage interval offsets could be stored in an uncertainty variable array as the relative values (−25%, 50%) or (−0.25, 0.5).
 
 An uncertainty variable containing relative difference offsets does not represent the same physical quantity as the parent data variable, and must not have a **`standard_name`** attribute.
@@ -430,6 +431,7 @@ Each error-correlation coefficient must be in the range −1 to 1.
 The matrix must be symmetric and have ones on the main diagonal.
 An error-correlation variable must have dimensionless units.
 For instance, if the given dimension is `time` with size 360, then `time: varname` means that the error-correlation variable `varname` contains a 360 by 360 error-correlation matrix for the `time` dimension.
+See <<example-uncertainty-error-correlation-1d-a, Example 10.7>>.
 
 *Form 1b* is similar to form 1a, but now the error-correlation variable provides error correlations for every pair of cells indexed by two or more dimensions simultaneously.
 The error-correlation matrix is square and indexes the given dimensions after they have been flattened in row-major order, i.e. the first of the dimensions given in the **`error_correlation`** attribute varies the slowest, and the last varies the fastest.
@@ -437,6 +439,7 @@ The number of rows or columns in the matrix is therefore equal to the product of
 For instance, if the dimension `lat` has size 20 and dimension `lon` has size 30, then `lat: lon: varname` means that the error-correlation variable `varname` contains a 600 by 600 error-correlation matrix for the `lat` and `lon` dimensions that is composed of 400 non-overlapping square blocks, each of size 30 by 30.
 Each block along the main diagonal represents the error-correlations between pairs of cells on the `lon` dimension at a specific `lat` dimension location, and the off-diagonal blocks represent the correlations between pairs of cells on the `lon` dimension that have different `lat` dimension locations.
 To save space in the dataset, form 1b should only be used when the error-correlation structure is intrinsically coupled across the dimensions, and cannot be calculated using the Kronecker product <<KRONECKER>> of error-correlation matrices that each apply to a single dimension.
+See <<example-uncertainty-error-correlation-2d, Example 10.9>>.
 
 *Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names an error-correlation structural type which implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
 The structural type must be one of the those defined in <<uncertainty-cv-structural-type, Table N.3>>.
@@ -445,6 +448,7 @@ The special case of there being no dimension is a convenience for the common cas
 For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `independent`, `lat: independent lon: independent`, and `lon: independent lat: independent` are equivalent.
 If the dimension is omitted then there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
 If the data writer expects "__error_correlation_structure__" to be interpreted as one of the structural type strings defined in <<uncertainty-cv-structural-type, Table N.3>>, then none of the variables in the dataset should be given a name identical to that of the string, because the encoding of an error-correlation variable takes precedence.
+See <<example-uncertainty-error-correlation-1d-a, Example 10.7>>.
 
 *Form 2b* is similar to form 2a, but with the addition of standardized parameters for configuring the structural type.
 Parameters for configuring the structural type are given by the "__parameter: value__" pairs that identify a configuration parameter and provide its value.
@@ -453,6 +457,7 @@ In general, "__value__" names a scalar __error-correlation parameter variable__ 
 However, in the special case that the parameter value is an integer with no units (such as a number of cells), then the "__value__" may alternatively be set as the decimal representation of that integer.
 For instance, the `trianglar` structural type must be configured with the parameter __n__, and for a parameter value of 50, this could be specified as either `n: 50` or `n: varname`, where `varname` is the name of a scalar variable with the value 50 in its data array.
 If the data writer expects "__value__" to be interpreted as an integer, then none of the variables in the dataset should be given a name identical to that of the string of digits, because the encoding of an error-correlation parameter variable takes precedence.
+See <<example-uncertainty-error-correlation-1d-a, Example 10.7>> and <<example-uncertainty-error-correlation-1d-b, Example 10.8>>.
 
 [[example-uncertainty-error-correlation-1d-a]]
 [caption="Example 10.7. "]
@@ -479,11 +484,6 @@ variables:
                              lon: triangular (localisation_radius: 15)" ;
   // Error-correlation variable
   float correlations(lat, lat1) ;
-  // Error-correlation parameter variable
-  float sigma ;
-    sigma:standard_name = "sea_surface_temperature" ;
-    sigma:units = "K" ;
-    sigma:units_metadata = "temperature: difference" ;
 ----
 
 Error correlations described by error-correlation matrices that demonstrate forms 1a, 2a, and 2b of the **`error_correlation`** attribute.
@@ -526,7 +526,7 @@ variables:
 
 ----
 
-As for example <<example-uncertainty-error-correlation-1d, Example 10.7>>, but now the configuration parameter `localisation_radius` of the `triangular` error-correlation structural type is provided by the error-correlation parameter variable `r`, which gives the parameter value in units of metres.
+As for example <<example-uncertainty-error-correlation-1d, Example 10.7>>, but now for the `lon` dimension, the form 2b configuration parameter `localisation_radius` is instead provided by the error-correlation parameter variable `r`, which gives the parameter value in units of metres.
 Note: To enhance readability of this example, the **`error_correlation`** attribute value has been split across multiple lines, whereas the actual encoded value would be a string with no embedded newlines, and this pseudo-CDL will not parse directly.
 
 ====
@@ -568,6 +568,7 @@ In *form 3a*, the actual error-correlation coefficients for the given dimension 
 For instance, `time: (time scale = 1 day)` could be used to indicate the temporal scale over which the errors are correlated along the `time` dimension.
 The non-standardized information may optionally be preceded by the string "__comment:__" (e.g. `time: (comment: time scale = 1 day)`), but is recommended to not do this.
 Similarly to form 2a, the special case of there being no given dimension (e.g. `(length scale = 100 km)`) is a convenience for when the non-standardized information is to be applied independently to each dimension of the parent data variable, and in this case there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
+See <<example-uncertainty-error-correlation-comment, Example 10.10>>.
 
 A non-standardized comment providing extra information about the error-correlations may also be provided for forms 1 and 2.
 In this case, the round brackets containing the non-standardized text are placed immediately after the error-correlation variable name or the error-correlation structural type (e.g. `lat: varname (length scale = 100km)`).
