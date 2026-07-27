@@ -51,31 +51,40 @@ For instance, a `chi_squared` distributoin with __k__ degrees of freedom is the 
 
 [[uncertainty-cv-structural-type]]
 .Error-correlation structural types allowed by the "__error_correlation_structure__" component of the **`error_correlation`** attribute
-[options="header",cols="2,3,4,3",caption="Table N.3. "]
+[options="header",cols="2,3,1,4,4",caption="Table N.3. "]
 |===============
 | Structural type
 | Description
+| Number of dimensions (N)
 | Implied error-correlation matrix structure
 | Configuration parameters (see <<uncertainty-cv-structural-type-parameters, Table N.4>>)
 
 | `independent`
 | No error-correlation.
+| N ≥ 1
 | The identity matrix.
+The error-correlation structure arising from two or more dimensions simulataneously is the same as that resulting from the structural type applied to those dimensions individually. 
 a|
 
 | `common`
-| Full error-correlation.
+| Perfect error-correlation.
+| N ≥ 1
 | A full matrix of ones.
+The error-correlation structure arising from two or more dimensions simulataneously is the same as that resulting from the structural type applied to those dimensions individually. 
 a|
 
 | `triangular`
-| Error-correlation drops linearly along the dimension.
+| Error-correlation drops linearly along each dimension.
+| N ≥ 1
 | A banded diagonal matrix, with values dropping off linearly from the diagonal.
+The error-correlation structure arising from two or more dimensions simulataneously may be different to that resulting from the structural type applied to those dimensions individually. 
 a| * `localisation_radius`
 
 | `exponential`
-| Error-correlation drops exponentially along the dimension.
-| A banded diagonal matrix, with values dropping off exponential from the diagonal.
+| Error-correlation drops exponentially along each dimension.
+| N ≥ 1
+| A banded diagonal matrix, with values dropping off exponentially from the diagonal.
+The error-correlation structure arising from two or more dimensions simulataneously may be different to that resulting from the structural type applied to those dimensions individually. 
 a| * `localisation_radius`
 * `e_folding_length`
 |===============
@@ -89,16 +98,16 @@ a| * `localisation_radius`
 | Applicable structural types (see <<uncertainty-cv-error-correlation-structure, Table N.3>>)
 
 | `localization_radius`
-| The distance along the dimension at which error-correlation reduces to zero.
-An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
-An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
+| The distance along a dimension at which error-correlation reduces to zero.
+An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension; `degrees` could be used when both latitude" and "longitude" dimensions are indicated).
+A dimensionless integer is assumed to be a number of cells.
 a| * `triangular`
 * `exponential`
 
 | `e_folding_length`
-| The distance along the dimension at which error-correlation reduces by a factor of __e__.
-An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension).
-An integer within the **`error_correlation`** attribute string is assumed to be a number of cells.
+| The distance along a dimension at which error-correlation reduces by a factor of __e__.
+An error-correlation parameter variable may have any units that physically meaningful for the dimension (e.g. units of `metres` or `degrees_north` could be used for a "latitude" dimension; `degrees` could be used when both latitude" and "longitude" dimensions are indicated).
+A dimensionless integer is assumed to be a number of cells.
 a| * `exponential`
 |===============
 

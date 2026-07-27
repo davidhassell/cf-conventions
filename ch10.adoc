@@ -441,6 +441,7 @@ To save space in the dataset, form 1b should only be used when the error-correla
 *Form 2a* is a parameterized alternative to form 1a, for which "__error_correlation_structure__" names an error-correlation structural type which implies the error-correlation coefficient matrix for every pair of cells indexed by the given dimension.
 The structural type must be one of the those defined in <<uncertainty-cv-structural-type, Table N.3>>.
 For instance, when the errors are independent (i.e. uncorrelated) the error-correlation matrix is always the identity matrix, which can be parameterized with the structural type `independent`.
+Each structural type must be associated with a number of dimensions that is in the range allowed by the structural type definition in <<uncertainty-cv-structural-type, Table N.3>>, and the parameterization applies to all of those dimensions simultaneously, rather than to each named dimension independently.
 The special case of there being no dimension is a convenience for the common case of the structural type being applied independently to each dimension of the parent data variable.
 For instance, if `lat` and `lon` are the dimensions of the data variable, then all three of `independent`, `lat: independent lon: independent`, and `lon: independent lat: independent` are equivalent.
 If the dimension is omitted then there can only be one element in the **`error_correlation`** string, because it implicitly references all of the data variable's dimensions.
