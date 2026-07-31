@@ -743,17 +743,17 @@ If the optional formula term `**nsigma**` is supplied, it must equal the number 
 
 *Requirements:*
 
-* If an uncertainty variable has an error_correlation attribute then it must be a string whose value is one or more blank separated word lists, each with one of the forms, where square brackets indicate optional content:
+* If an uncertainty variable has an **`error_correlation`** attribute then it must be a string whose value is one or more blank separated word lists, each with one of the forms, where square brackets indicate optional content:
 
   dim: error_correlation_var [([comment:] comment)]
 
   dim: dim: [dim: ...] error_correlation_var [([comment:] comment)]
 
-  [dim:] error_correlation_structure [(comment: comment)]
+  dim: [dim: ...] error_correlation_structure [(comment: comment)]
 
-  [dim:] error_correlation_structure (parameter: value [parameter: value ...] [comment: comment])
+  dim: [dim: ...] error_correlation_structure (parameter: value [parameter: value ...] [comment: comment])
 
-  [dim:] ([comment:] comment)
+  dim: [dim: ...] ([comment:] comment)
 
 * The valid values for "__dim__" are the names of dimensions of the parent data variable.
 
@@ -781,10 +781,20 @@ If the optional formula term `**nsigma**` is supplied, it must equal the number 
 
 * The valid values of "__error_correlation_structure__" are those defined in Appendix N.
 
-* The valid values of parameter for a given "__error_correlation_structure__" are those defined in Appendix N.
+** The number of associated dimensions must be in the range defined in Appendix N.
 
-* A value must either name an error-correlation parameter variable or else be a string representation of an integer.
+** The valid values of parameter for a given "__error_correlation_structure__" are those defined in Appendix N.
 
-* When a comment appears with a parameter: value pair, the comment must be preceded by the string "comment:"
+** A parameter value must either name an error-correlation parameter variable or else be a string representation of an integer.
 
-* An error-correlation parameter variable must exist in the file.
+** When a comment appears with a "__parameter: value__" pair, the comment must be preceded by the string "__comment:__"
+
+** A comment must be placed after any parameter definitions.
+
+** An error-correlation parameter variable must exist in the file.
+
+*Recommendations:*
+
+* A comment following a error-correlation variable name in the **`error_correlation`** attribute should not be preceded by the string "__comment:__".
+
+* A comment following a dimension name in the **`error_correlation`** attribute should not be preceded by the string "__comment:__".
