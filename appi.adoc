@@ -494,7 +494,8 @@ CF uncertainty variables correspond to uncertainty constructs.
 [[data-model-uncertainty-ancillary]]
 ==== Uncertainty ancillary construct
 
-An uncertainty ancillary construct (<<figure-field>>) provides metadata for describing a parameter of the probability distributions of the measurands (i.e. the true unknowable values of measurements stored in the field construct's array). The parameter is distributed over the same sampling domain as the field itself.
+An uncertainty ancillary construct (<<figure-field>>) provides metadata for describing a parameter of the probability distributions of the measurands (i.e. the true unknowable values of measurements stored in the field construct's array).
+The parameter is distributed over the same sampling domain as the field itself.
 For instance, an uncertainty ancillary construct could provide a statistical moment of the probability distributions (such as skewness), or a descriptor of the joint probability distribution of the measurands (such as error-correlation coefficients).
 
 An uncertainty ancillary construct consists of the following:
@@ -504,8 +505,10 @@ An uncertainty ancillary construct consists of the following:
 * An optional array of parameter values that depends on a subset of zero or more domain axis constructs.
 The array is omitted when the exact parameter values are not known.
 The array provides values that describe the probability distribution at the locations indexed by the domain axis constructs.
-When the joint probability distribution of the measurands is being described, the array may also span extra trailing dimensions, one for each domain construct spanned by the array, and in the same order. Each extra dimension has the same size as its corresponding domain axis construct.
+When the joint probability distribution of the measurands is being described, the array may also span extra trailing dimensions, one for each domain construct spanned by the array, and in the same order.
+Each extra dimension has the same size as its corresponding domain axis construct.
 
 * Optional properties to describe the data array (in the same sense as for the field construct).
 
-CF distribution parameter variables and error-correlation variables correspond to uncertainty ancillary constructs. An error-correlation parameter variable corresponds to a property that describes how the parameter relates to the probability distributions; as does a comment, or an integer error-correlation parameter, within an **`error_correlation`** attribute.
+CF distribution parameter variables and error-correlation variables correspond to uncertainty ancillary constructs.
+An error-correlation parameter variable corresponds to a property that describes how the parameter relates to the probability distributions; as does a comment, or an integer error-correlation parameter, within an **`error_correlation`** attribute.

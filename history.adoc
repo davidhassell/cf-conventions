@@ -7,7 +7,7 @@
 
 === Version 1.15-draft (most recent first)
 
-* {issues}???[Issue #???]: Uncertainty metadata: New chapter 10 and appendix N
+* {issues}???[Issue #660]: Uncertainty metadata: New chapter 10 and appendix N
 
 === Version 1.14-draft (most recent first)
 
